@@ -1,0 +1,1 @@
+/usr/bin/cc  -O3 -g CMakeFiles/sample_app.dir/app/camtest.c.o -o bin/sample_app  -Wl,-rpath,"\$ORIGIN:/home/topo/wrapper_cmake_copy/build/bin" bin/libwrapper.so bin/libutils.so 
