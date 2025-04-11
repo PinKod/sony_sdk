@@ -29,15 +29,15 @@ if [ ! -e "$DEVICE_PATH" ]; then
 fi
 
 # Check for reset utility
-if ! command -v /home/topo/reset_usb &> /dev/null; then
-    echo "Error: /home/topo/reset_usb utility not found!"
+if ! command -v ./usb_reset/reset_usb &> /dev/null; then
+    echo "Error: ./usb_reset/reset_usb utility not found!"
     echo "Compile the C program first with: gcc usbreset.c -o usbreset"
     exit 1
 fi
 
 # Reset the device
 echo "Resetting Sony ILX-LR1 at $DEVICE_PATH..."
-sudo /home/topo/reset_usb "$DEVICE_PATH"
+sudo ./usb_reset/reset_usb "$DEVICE_PATH"
 
 # Check result
 if [ $? -eq 0 ]; then
