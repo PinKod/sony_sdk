@@ -36,7 +36,11 @@ long int sdk_release() {
   
 long int sdk_enum_camera_object(void** enum_camera_object_handle) {
     SCRSDK::ICrEnumCameraObjectInfo* camera_list = nullptr;
-    return (long int) SCRSDK::EnumCameraObjects((SCRSDK::ICrEnumCameraObjectInfo**)enum_camera_object_handle);
+    auto res = SCRSDK::EnumCameraObjects(&camera_list);
+    printf("res:%d\n", res);
+    printf("list:%p\n", (void*)camera_list);
+    *enum_camera_object_handle = camera_list;
+    return res;
 }
 
 //ICrCameraObjectInfo* CreateCameraObjectInfo(CrChar* name, CrChar *model, CrInt16 usbPid, CrInt32u idType, CrInt32u idSize, CrInt8u* id, CrChar *connectTypeName, CrChar *adaptorName, CrChar *pairingNecessity, CrInt32u sshSupport = 0);
@@ -66,7 +70,7 @@ long int sdk_get_fingerprint(void* camera_object_info_handle, char* fingerprint,
 
 //CrError Connect(/*in*/ ICrCameraObjectInfo* pCameraObjectInfo, /*in*/  IDeviceCallback* callback, /*out*/ CrDeviceHandle* deviceHandle, /*in*/ CrSdkControlMode openMode = CrSdkControlMode_Remote, /*in*/ CrReconnectingSet reconnect = CrReconnecting_ON, const char* userId = 0, const char* userPassword = 0, const char* fingerprint = 0, CrInt32u fingerprintSize = 0);
 long int sdk_connect(void* camera_object_info_handle, void* device_callback_handle, void* device_handle_handle) {
-    return (long int) SCRSDK::Connect((SCRSDK::ICrCameraObjectInfo*)camera_object_info_handle, (SCRSDK::IDeviceCallback*)device_callback_handle, (SCRSDK::CrDeviceHandle*)device_handle_handle);
+    return (long int) SCRSDK::Connect((SCRSDK::ICrCameraObjectInfo*)camera_object_info_handle, new SCRSDK::IDeviceCallback(), (SCRSDK::CrDeviceHandle*)device_handle_handle);
 }
 
 //CrError Disconnect(/*in*/ CrDeviceHandle deviceHandle);

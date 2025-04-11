@@ -19,6 +19,7 @@ void timed_loop(void* device_handle_handle) {
 }
 
 int main() {
+    printf("here\n");
     if (sdk_init()) 
     {
         perror("SDK initialization failed\n");
