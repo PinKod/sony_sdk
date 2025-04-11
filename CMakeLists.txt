@@ -2,21 +2,31 @@ cmake_minimum_required(VERSION 3.10)
 project(CameraSDK_Project LANGUAGES C CXX)
 
 # Set compiler flags
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -g -fpermissive")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -DNDEBUG -Wall -Werror -Wextra -pedantic \
-    -Wno-unused-parameter \
-    -Wno-unused-variable \
-    -Wno-unknown-pragmas \
-    -Wno-error=unknown-pragmas \
-    -Wno-error=unused-variable")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG -fpermissive -Wall -Werror -Wextra -pedantic \
-    -Wno-unused-parameter \
-    -Wno-unused-variable \
-    -Wno-unknown-pragmas \
-    -Wno-error=unknown-pragmas \
-    -Wno-error=unused-variable")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -DNDEBUG -Wall -Werror -Wextra -pedantic \
+#     -Wno-unused-parameter \
+#     -Wno-unused-variable \
+#     -Wno-unknown-pragmas \
+#     -Wno-error=unknown-pragmas \
+#     -Wno-error=unused-variable")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG -fpermissive -Wall -Werror -Wextra -pedantic \
+#     -Wno-unused-parameter \
+#     -Wno-unused-variable \
+#     -Wno-unknown-pragmas \
+#     -Wno-error=unknown-pragmas \
+#     -Wno-error=unused-variable")
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g -Wall -Werror -Wextra -pedantic \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-unknown-pragmas \
+    -Wno-error=unknown-pragmas \
+    -Wno-error=unused-variable")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -g -fpermissive -Wall -Werror -Wextra -pedantic \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-unknown-pragmas \
+    -Wno-error=unknown-pragmas \
+    -Wno-error=unused-variable")    
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -84,5 +94,8 @@ add_executable(sample_app
 )
 
 target_include_directories(sample_app PRIVATE ${CMAKE_SOURCE_DIR}/c++_wrapper ${CMAKE_SOURCE_DIR}/classes_methods ${CMAKE_SOURCE_DIR}/utils)
-target_link_libraries(sample_app PRIVATE wrapper utils)
 add_dependencies(sample_app copy_libs)
+target_link_libraries(sample_app PRIVATE 
+    wrapper 
+    utils
+)
