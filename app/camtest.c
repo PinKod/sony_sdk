@@ -13,10 +13,8 @@
 #define INTERVAL_NS 33333333  // 33.333333 milliseconds
 
 void timed_loop(void* device_handle_handle) {
-
     for(int i = 0; i < 120; i++) {  // Or use a while(1) loop
         void* image_data_block_handle = just_get_live_view(device_handle_handle);
-
     }
 }
 
