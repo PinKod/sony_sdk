@@ -1,12 +1,13 @@
 #include "./../c++_wrapper/wrapper.h"
 #include "./../classes_methods/classes_methods.h"
+#include "./../utils/utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h> 
 
-#define _POSIX_C_SOURCE 199309L
+//#define _POSIX_C_SOURCE 199309L
 #include <time.h>
 
 #define INTERVAL_NS 33333333  // 33.333333 milliseconds
@@ -93,7 +94,7 @@ int main() {
         
     void* device_handle_handle = NULL;
     long long int connect_result = sdk_connect(camera_info, NULL, &device_handle_handle);
-    printf("Connection result:%lld      device_handle_handle:%p     device:%lld\n", connect_result, device_handle_handle, device_handle_handle);
+    printf("Connection result:%lld      device_handle_handle:%p     device:%lld\n", connect_result, device_handle_handle, *(long long*)device_handle_handle);
     sdk_camera_device_set_save_info(device_handle_handle);
         
     int dummy_int  = 0;

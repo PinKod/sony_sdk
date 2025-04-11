@@ -1,6 +1,7 @@
 #include "./classes_methods.h"
 
 #include "./../c++_wrapper/CameraRemote_SDK.h"
+#include "./../c++_wrapper/CrImageDataBlock.h"
 #include "./../c++_wrapper/CrError.h"
 #include "./../c++_wrapper/CrTypes.h"
 #include "./../c++_wrapper/callback.hpp"
@@ -406,8 +407,17 @@ void sdk_set_image_data_osd(void* h, unsigned char* data) {
 }
 
 void* sdk_get_meta_info_osd(void* h) {
-    SCRSDK::CrOSDImageMetaInfo* block = &reinterpret_cast<SCRSDK::CrOSDImageDataBlock*>(h)->GetMetaInfo();
-    return reinterpret_cast<void*>(block);
+    SCRSDK::CrOSDImageMetaInfo block = reinterpret_cast<SCRSDK::CrOSDImageDataBlock*>(h)->GetMetaInfo();
+    SCRSDK::CrOSDImageMetaInfo* meta = new SCRSDK::CrOSDImageMetaInfo();
+    meta->isLvPosExist = block.isLvPosExist;
+    meta->osdWidth = block.osdWidth;
+    meta->osdHeight = block.osdHeight;
+    meta->lvPosX = block.lvPosX;
+    meta->lvPosY = block.lvPosY;
+    meta->lvWidth = block.lvWidth;
+    meta->lvHeight = block.lvHeight;
+    meta->degree = block.degree;
+    return (void*)meta;
 }
 //wrapper for class SCRSDK_API CrOSDImageDataBlock
 

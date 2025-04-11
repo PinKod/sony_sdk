@@ -2,8 +2,21 @@ cmake_minimum_required(VERSION 3.10)
 project(CameraSDK_Project LANGUAGES C CXX)
 
 # Set compiler flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -g -fpermissive")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -g -fpermissive")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -DNDEBUG -Wall -Werror -Wextra -pedantic \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-unknown-pragmas \
+    -Wno-error=unknown-pragmas \
+    -Wno-error=unused-variable")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG -fpermissive -Wall -Werror -Wextra -pedantic \
+    -Wno-unused-parameter \
+    -Wno-unused-variable \
+    -Wno-unknown-pragmas \
+    -Wno-error=unknown-pragmas \
+    -Wno-error=unused-variable")
+
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

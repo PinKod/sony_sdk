@@ -161,12 +161,12 @@ long int sdk_get_date_folder_list(void* device_handle_handle, void** folder_info
 
 //CrError GetContentsHandleList(/*in*/ CrDeviceHandle deviceHandle, /*in*/CrFolderHandle folderHandle, /*out*/ CrContentHandle** contentsHandles, /*out*/ CrInt32u* numOfContents);
 long int sdk_get_contents_handle_list(void* device_handle_handle, void* folder_handle, void** contents_handle, long int* number_of_contents) {
-    return (long int) SCRSDK::GetContentsHandleList((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrFolderHandle)folder_handle, (SCRSDK::CrContentHandle**)contents_handle, (CrInt32u*)number_of_contents);
-}
+    return (long int) SCRSDK::GetContentsHandleList((SCRSDK::CrDeviceHandle)device_handle_handle, *(SCRSDK::CrFolderHandle*)folder_handle, (SCRSDK::CrContentHandle**)contents_handle, (CrInt32u*)number_of_contents);
+}   
 
 //CrError GetContentsDetailInfo(/*in*/ CrDeviceHandle deviceHandle, /*in*/CrContentHandle contentHandle, /*out*/ CrMtpContentsInfo* contentsInfo);
 long int sdk_get_contents_detail_info(void* device_handle_handle, void* content_handle, void** contents_info_handle) {
-    return (long int) SCRSDK::GetContentsDetailInfo((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrContentHandle)content_handle, (SCRSDK::CrMtpContentsInfo*)contents_info_handle);
+    return (long int) SCRSDK::GetContentsDetailInfo((SCRSDK::CrDeviceHandle)device_handle_handle, *(SCRSDK::CrContentHandle*)content_handle, (SCRSDK::CrMtpContentsInfo*)contents_info_handle);
 }
 
 //CrError ReleaseDateFolderList(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrMtpFolderInfo* folders);
@@ -181,12 +181,12 @@ long int sdk_release_contents_handle_list(void* device_handle_handle, void* cont
 
 //CrError PullContentsFile(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrContentHandle contentHandle, /*in*/ CrPropertyStillImageTransSize size = CrPropertyStillImageTransSize_Original, /*in*/ CrChar* path = 0, /*in*/ CrChar* fileName = 0);
 long int sdk_pull_contents_file(void* device_handle_handle, void* content_handle, long int size, char* path, char* file_name) {
-    return (long int) SCRSDK::PullContentsFile((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrContentHandle)content_handle, (SCRSDK::CrPropertyStillImageTransSize)size, path, file_name);
+    return (long int) SCRSDK::PullContentsFile((SCRSDK::CrDeviceHandle)device_handle_handle, *(SCRSDK::CrContentHandle*)content_handle, (SCRSDK::CrPropertyStillImageTransSize)size, path, file_name);
 }
 
 //CrError GetContentsThumbnailImage(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrContentHandle contentHandle, /*out*/ CrImageDataBlock* imageData, /*out*/ CrFileType* fileType);
 long int sdk_get_contents_thumbnail_image(void* device_handle_handle, void* content_handle, void* image_data_block_handle, long int* file_type) {
-    return (long int) SCRSDK::GetContentsThumbnailImage((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrContentHandle)content_handle, (SCRSDK::CrImageDataBlock*)image_data_block_handle, (SCRSDK::CrFileType*)file_type);
+    return (long int) SCRSDK::GetContentsThumbnailImage((SCRSDK::CrDeviceHandle)device_handle_handle, *(SCRSDK::CrContentHandle*)content_handle, (SCRSDK::CrImageDataBlock*)image_data_block_handle, (SCRSDK::CrFileType*)file_type);
 }
 
 //CrError DownloadSettingFile(/*in*/ CrDeviceHandle deviceHandle, /*in*/CrDownloadSettingFileType type, CrChar* filePath = 0, CrChar* fileName = 0, const char* password = 0);

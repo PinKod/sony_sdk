@@ -5,13 +5,16 @@
 #include "./../c++_wrapper/CrTypes.h"
 #include "./../c++_wrapper/callback.hpp"
 
+#include <string.h> 
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <thread>
 #include <unistd.h>
+#include <cstring>
 #include <string>
-#include <codecvt> 
+#include <codecvt>
+
 
 namespace fs = std::filesystem;
 using namespace std;
@@ -21,8 +24,12 @@ void sdk_camera_device_set_save_info(void* device_handle_handle) {
     constexpr int ImageSaveAutoStartNo = -1;
     std::__cxx11::basic_string<char>  path = fs::current_path().native();
 
+    #ifdef Werror
+    #define Werror=write-strings
     auto save_status = SCRSDK::SetSaveInfo(*reinterpret_cast<SCRSDK::CrDeviceHandle*>(device_handle_handle)
         , const_cast<char*>(path.data()), "", ImageSaveAutoStartNo);
+    #undef Werror=write-strings
+    #endif
 }
 
 
@@ -67,8 +74,12 @@ void sdk_capture_image(void* device_handle_handle, char* meta_info) {
     std::string prefix;
     prefix.append("__");
     prefix.append(meta_info);
+    #ifdef Werror
+    #define Werror=write-strings
     char* ptr_prefix = const_cast<char*>(prefix.c_str());
     std::cout << "save path res1: " << SCRSDK::SetSaveInfo(m_device_handle, "C:\\Image", ptr_prefix, 163) << '\n';
+    #undef Werror=write-strings
+    #endif
     // usleep(499999);
     std::cout << "Capture image...\n";
     std::cout << "Shutter down\n";
@@ -133,7 +144,7 @@ void* just_get_live_view(void* device_handle_handle) {
     // image_buff = new CrInt8u[bufSize];
     #define  BUFF_SIZE_IMAGE_INFO 1048576  //  1024 * 1024
     static unsigned char image_buff[BUFF_SIZE_IMAGE_INFO];
-    memcpy(image_buff, )
+    memset(image_buff, 0, BUFF_SIZE_IMAGE_INFO);
     image_data->SetSize(bufSize);
     image_data->SetData(image_buff);
 
