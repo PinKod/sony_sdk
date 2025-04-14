@@ -85,7 +85,7 @@ long int sdk_release_device(void* device_handle_handle) {
 
 //CrError GetDeviceProperties(/*in*/ CrDeviceHandle deviceHandle, /*out*/CrDeviceProperty** properties, /*out*/ CrInt32* numOfProperties);
 long int sdk_get_device_properties(void* device_handle_handle, void** device_property_handle, long int* number_of_properties) {
-    return (long int) SCRSDK::GetDeviceProperties((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrDeviceProperty**)device_property_handle, (CrInt32*)(number_of_properties));
+    return (long int) SCRSDK::GetDeviceProperties(reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle), (SCRSDK::CrDeviceProperty**)(device_property_handle), reinterpret_cast<CrInt32*>(number_of_properties));
 }
 
 //CrError GetSelectDeviceProperties(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrInt32u numOfCodes, /*in*/ CrInt32u* codes, /*out*/CrDeviceProperty** properties, /*out*/ CrInt32* numOfProperties);

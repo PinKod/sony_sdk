@@ -1,0 +1,1 @@
+/usr/bin/cc  -g -Wall -Werror -Wextra -pedantic     -Wno-unused-parameter     -Wno-unused-variable     -Wno-unknown-pragmas     -Wno-error=unknown-pragmas     -Wno-error=unused-variable   CMakeFiles/sample_app.dir/app/app.c.o  -o bin/sample_app  -Wl,-rpath,"\$ORIGIN:/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/bin" bin/libwrapper.so bin/libutils.so 

@@ -208,3 +208,18 @@ time_stream << std::put_time(&now_tm, "%Y_%m_%d_%H_%M_%S")
     // delete[] image_buff; // Release
     return (void*)(image_data); //return image data block
 }
+
+
+long long get_device_property_focus(void* device_properties_handle) {
+    SCRSDK::CrDeviceHandle device_m = reinterpret_cast<SCRSDK::CrDeviceHandle>(device_properties_handle);
+    std::int32_t nprop = 0;
+    SCRSDK::CrDeviceProperty* prop_list = nullptr;
+    CrInt32u getCode = SCRSDK::CrDevicePropertyCode::CrDeviceProperty_FocusPositionCurrentValue;
+    auto status = SCRSDK::GetSelectDeviceProperties(device_m, 1, &getCode, &prop_list, &nprop);
+    if(status) {
+        std::cout << "focus err: " << status << '\n';
+        return -1;
+    }
+    return prop_list[0].GetCurrentValue();
+}
+

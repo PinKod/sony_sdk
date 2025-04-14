@@ -1,0 +1,6 @@
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/rebuild_cache.dir
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/edit_cache.dir
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/sample_app.dir
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/utils.dir
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/wrapper.dir
+/home/pinkod/work_topodrone/wrapper_sony_sdk_api/build/CMakeFiles/copy_libs.dir

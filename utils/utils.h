@@ -17,6 +17,10 @@ void* just_get_live_view(void* device_handle_handle);
 
 
 
+
+
+long long get_device_property_focus(void* device_properties_handle);
+
 #ifdef __cplusplus
 }
 #endif

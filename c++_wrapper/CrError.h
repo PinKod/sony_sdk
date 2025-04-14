@@ -109,7 +109,7 @@ namespace SCRSDK
 		CrError_Memory_OutOfMemory,
 		CrError_Memory_InvalidPointer,
 		CrError_Memory_Insufficient,
-
+		//32774
 		//API related
 		CrError_Api_Unknown							= CrError_Api,
 		CrError_Api_Insufficient,

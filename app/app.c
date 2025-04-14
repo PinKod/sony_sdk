@@ -166,39 +166,45 @@ int main() {
         //     sdk_save_image(image_data_block_handle);
         // }
 
+        printf("focus test\n");
 
-
-
-
-
-
-
-        // !!!                                                !!!
-        // !!!                                                !!!
-        // loop for taking liveView image(a lot)30 fps(not fixed)
-        // !!!                                                !!!
-        // !!!                                                !!!
-        sleep(2);
-        for(int i = 0; i < 1; i++) {
-
-            timed_loop(device_handle_handle);
+        long int number_of_properties = -1;
+        void* device_property_handle = NULL;
+        long int prop_res = sdk_get_device_properties(device_handle_handle, &device_property_handle, &number_of_properties);
+        printf("prop res:%ld        device_property_handle:%p\n", prop_res, device_property_handle);
+        if(device_property_handle) {
+            printf("focus:%lld\n", get_device_property_focus(device_handle_handle));
         }
 
 
 
-        printf("save dst res: %d\n", sdk_change_saving_destination_to_camera(device_handle_handle));
-        for(int i = 0; i < 1; i++) {
-            //usleep(499999);
-            //get time in millisnods ad puts it to char buffer
-            char path[100];
-            struct timespec ts;
-            clock_gettime(CLOCK_REALTIME, &ts);
-            struct tm* tm_info = localtime(&ts.tv_sec);
-            strftime(path, sizeof(path), "%Y_%m_%d_%H_%M_%S_", tm_info);
-            snprintf(path + strlen(path), sizeof(path) - strlen(path), "_%ld", ts.tv_nsec / 1000);
-            printf("path:'%s'\n", path); 
-            sdk_capture_image(device_handle_handle, path);
-        }
+
+        // // !!!                                                !!!
+        // // !!!                                                !!!
+        // // loop for taking liveView image(a lot)30 fps(not fixed)
+        // // !!!                                                !!!
+        // // !!!                                                !!!
+        // sleep(2);
+        // for(int i = 0; i < 1; i++) {
+
+        //     timed_loop(device_handle_handle);
+        // }
+
+
+
+        // printf("save dst res: %d\n", sdk_change_saving_destination_to_camera(device_handle_handle));
+        // for(int i = 0; i < 1; i++) {
+        //     //usleep(499999);
+        //     //get time in millisnods ad puts it to char buffer
+        //     char path[100];
+        //     struct timespec ts;
+        //     clock_gettime(CLOCK_REALTIME, &ts);
+        //     struct tm* tm_info = localtime(&ts.tv_sec);
+        //     strftime(path, sizeof(path), "%Y_%m_%d_%H_%M_%S_", tm_info);
+        //     snprintf(path + strlen(path), sizeof(path) - strlen(path), "_%ld", ts.tv_nsec / 1000);
+        //     printf("path:'%s'\n", path); 
+        //     sdk_capture_image(device_handle_handle, path);
+        // }
 
 
 
