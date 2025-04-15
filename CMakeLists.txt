@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 project(CameraSDK_Project LANGUAGES C CXX)
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    set(CRSDK_LIB_DIR "${CMAKE_SOURCE_DIR}/external/x86_64/crsdk")
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    set(CRSDK_LIB_DIR "${CMAKE_SOURCE_DIR}/external/arm64/crsdk")
+else()
+    message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
 # Set compiler flags
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -DNDEBUG -Wall -Werror -Wextra -pedantic \
 #     -Wno-unused-parameter \
@@ -39,9 +47,9 @@ set(CMAKE_BUILD_RPATH "$ORIGIN")
 # Copy external libraries to build directory
 add_custom_target(copy_libs ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/crsdk ${CMAKE_BINARY_DIR}/bin
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/external/crsdk/CrAdapter ${CMAKE_BINARY_DIR}/bin
-    COMMENT "Copying external libraries..."
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CRSDK_LIB_DIR} ${CMAKE_BINARY_DIR}/bin
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CRSDK_LIB_DIR}/CrAdapter ${CMAKE_BINARY_DIR}/bin
+    COMMENT "Copying ${CMAKE_SYSTEM_PROCESSOR} libraries..."
 )
 
 
