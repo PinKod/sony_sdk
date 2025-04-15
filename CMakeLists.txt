@@ -23,13 +23,13 @@ endif()
 #     -Wno-error=unknown-pragmas \
 #     -Wno-error=unused-variable")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Werror -Wextra -pedantic \
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsigned-char -g -Wall -Werror -Wextra -pedantic \
     -Wno-unused-parameter \
     -Wno-unused-variable \
     -Wno-unknown-pragmas \
     -Wno-error=unknown-pragmas \
     -Wno-error=unused-variable")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g -fpermissive -Wall -Werror -Wextra -pedantic \
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsigned-char -std=c++17 -g -fpermissive -Wall -Werror -Wextra -pedantic \
     -Wno-unused-parameter \
     -Wno-unused-variable \
     -Wno-unknown-pragmas \
