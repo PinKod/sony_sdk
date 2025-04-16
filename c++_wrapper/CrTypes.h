@@ -41,7 +41,9 @@ typedef unsigned char		CrInt8u;	///<  8bit unsigned integer
 typedef short				CrInt16;	///< 16bit signed integer
 typedef unsigned short		CrInt16u;	///< 16bit unsigned integer
 typedef char				CrAChar;
+#ifdef __cplusplus
 typedef wchar_t				CrWChar;
+#endif 
 #if defined(_UNICODE) || defined(UNICODE)
 typedef CrWChar				CrChar;		///< Platform native character type
 #else

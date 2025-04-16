@@ -2,6 +2,7 @@
 
 #include "./../c++_wrapper/wrapper.h"
 #include "./../classes_methods/classes_methods.h"
+#include "./../c++_wrapper/CrTypes.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,9 +32,9 @@ char* get_live_veiw(void* device_handle_handle) {
     }
 
 
-    unsigned long long int buffer_size = sdk_get_buffer_size_image_info(image_info_handle);
+    CrInt32u buffer_size = sdk_get_buffer_size_image_info(image_info_handle);
     if(buffer_size < 1) {
-        fprintf(stderr, "GetLiveView FAILED 2      size:%lld\n", buffer_size);
+        fprintf(stderr, "GetLiveView FAILED 2      size:%d\n", buffer_size);
         return NULL;
     }
 

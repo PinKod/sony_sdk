@@ -282,11 +282,9 @@ void sdk_destruct_image_info(void* image_info_handle) {
     delete reinterpret_cast<SCRSDK::CrImageInfo*>(image_info_handle);
 }
 
-unsigned long long sdk_get_buffer_size_image_info(void* image_info_handle) {
+CrInt32u sdk_get_buffer_size_image_info(void* image_info_handle) {
     SCRSDK::CrImageInfo inf = *((SCRSDK::CrImageInfo*)image_info_handle);
-    return static_cast<unsigned long long>(
-        inf.GetBufferSize()
-    );
+    return inf.GetBufferSize();
 }
 //wrapper for class SCRSDK_API CrImageInfo
 

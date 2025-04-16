@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "./../c++_wrapper/CrTypes.h"
+
 //wrapper for class ICrCameraObjectInfo
 int sdk_enum_camera_object_get_count(void* enum_camera_object_handle);
 void* sdk_enum_camera_object_get_camera_object_info(void* enum_camera_object_handle, int index);
@@ -76,7 +78,7 @@ unsigned long sdk_get_time_code_image_data_block(void* image_data_block_handle);
 //wrapper for class SCRSDK_API CrImageInfo
 void* sdk_construct_image_info();
 void sdk_destruct_image_info(void* image_info_handle);
-unsigned long long sdk_get_buffer_size_image_info(void* image_info_handle);
+CrInt32u sdk_get_buffer_size_image_info(void* image_info_handle);
 //wrapper for class SCRSDK_API CrImageInfo
 
 
