@@ -53,7 +53,7 @@ char* get_live_veiw(void* device_handle_handle) {
         perror("not enougth buffer for image\n");
     }
 
-    
+
     memset(image_buff, 0, BUFF_SIZE_IMAGE_INFO);
     sdk_set_size_image_data_block(image_data_block_handle, buffer_size);
     sdk_set_data_image_data_block(image_data_block_handle, image_buff);
@@ -116,8 +116,8 @@ char* get_live_veiw(void* device_handle_handle) {
         return NULL;
     }
     
-
-    fwrite(image_buff, 1, sdk_get_image_size_image_data_block(image_data_block_handle), file);
+    fprintf(file, "%s", image_buff);
+    // fwrite(image_buff, 1, sdk_get_image_size_image_data_block(image_data_block_handle), file);
     fclose(file);
 
     
