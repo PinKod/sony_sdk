@@ -21,8 +21,8 @@ void timed_loop(void* device_handle_handle) {
         sdk_change_saving_destination_to_host_pc(device_handle_handle);
         char* path = get_live_veiw(device_handle_handle);
         if(!path) {
-            continue;
             sdk_change_saving_destination_to_camera(device_handle_handle);
+            continue;
         }
         printf("Original path: %s\n", path);
 
