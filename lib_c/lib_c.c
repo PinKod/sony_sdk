@@ -48,7 +48,7 @@ char* get_live_veiw(void* device_handle_handle) {
 
     #define  BUFF_SIZE_IMAGE_INFO 1048576  //  1024 * 1024
     static unsigned char image_buff[BUFF_SIZE_IMAGE_INFO];
-    fprintf(stderr, "BUFF_SIZE_IMAGE_INFO = 1048576 < %d = buffer_size\n", buffer_size);
+    fprintf(stderr, "BUFF_SIZE_IMAGE_INFO = 1048576 <> %d = buffer_size\n", buffer_size);
     if(buffer_size > BUFF_SIZE_IMAGE_INFO) {
         perror("not enougth buffer for image\n");
     }
