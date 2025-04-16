@@ -110,7 +110,7 @@ long int sdk_send_command(void* device_handle_handle, long int command_id, long 
 
 //CrError GetLiveViewImage(/*in*/ CrDeviceHandle deviceHandle, /*in*/CrImageDataBlock*imageData);
 long int sdk_get_live_view_image(void* device_handle_handle, void* image_data_block_handle) {
-    return (long int) SCRSDK::GetLiveViewImage((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrImageDataBlock*)image_data_block_handle);
+    return (long int) SCRSDK::GetLiveViewImage(reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle), (SCRSDK::CrImageDataBlock*)image_data_block_handle);
 }
 
 //CrError GetLiveViewImageInfo(/*in*/ CrDeviceHandle deviceHandle, /*out*/ CrImageInfo* info);
