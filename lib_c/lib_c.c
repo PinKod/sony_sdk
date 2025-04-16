@@ -13,6 +13,16 @@
 #include <limits.h>
 
 char* get_live_veiw(void* device_handle_handle) {
+
+    void* life_view_prop_handle = NULL;
+    int d_int = 0;
+    long int prop_result = sdk_get_live_view_properties(device_handle_handle, life_view_prop_handle, &d_int);
+    if(prop_result) {
+        fprintf(stderr, "GetLiveView FAILED 0      err:%ld\n", prop_result);
+        return NULL;
+    }
+    sdk_release_live_view_properties(device_handle_handle, life_view_prop_handle);
+
     void* image_info_handle = NULL;
     long int info_result = sdk_get_live_view_image_info(device_handle_handle, image_info_handle);
     if(info_result) {
