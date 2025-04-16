@@ -284,7 +284,7 @@ void sdk_destruct_image_info(void* image_info_handle) {
 
 unsigned long long sdk_get_buffer_size_image_info(void* image_info_handle) {
     return static_cast<unsigned long>(
-        static_cast<SCRSDK::CrImageInfo*>(image_info_handle)->GetBufferSize()
+        reinterpret_cast<SCRSDK::CrImageInfo*>(image_info_handle)->GetBufferSize()
     );
 }
 //wrapper for class SCRSDK_API CrImageInfo
