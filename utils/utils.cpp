@@ -215,7 +215,10 @@ time_stream << std::put_time(&now_tm, "%Y_%m_%d_%H_%M_%S")
         file.close();
     }
     std::cout << "GetLiveView SUCCESS\n";
-    return (char*) path.c_str(); //return image data block
+    // delete[] image_buff; // Release
+    auto res_path = new std::string();
+    res_path->copy((char*) path.c_str(), strlen(path.c_str()), 0);
+    return (char*) res_path; //return image data block
 }
 
 
