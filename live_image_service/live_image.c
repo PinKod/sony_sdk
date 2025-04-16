@@ -20,6 +20,10 @@ void timed_loop(void* device_handle_handle) {
     while(c++ < 100) {
         sdk_change_saving_destination_to_host_pc(device_handle_handle);
         char* path = get_live_veiw(device_handle_handle);
+        if(!path) {
+            continue;
+            sdk_change_saving_destination_to_camera(device_handle_handle);
+        }
         printf("Original path: %s\n", path);
 
         /* New code for renaming file */
