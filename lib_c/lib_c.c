@@ -116,7 +116,7 @@ char* get_live_veiw(void* device_handle_handle) {
         return NULL;
     }
     
-    fwrite(image_buff, 1, buffer_size, file);
+    fwrite(sdk_get_image_data_image_data_block(image_data_block_handle), 1, buffer_size, file);
     fclose(file);
 
     
