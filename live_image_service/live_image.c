@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h> 
+#include <unistd.h>
+#include <errno.h>
 
 //#define _POSIX_C_SOURCE 199309L
 #include <time.h>
@@ -18,7 +19,32 @@ void timed_loop(void* device_handle_handle) {
     while(c++ < 100) {
         sdk_change_saving_destination_to_host_pc(device_handle_handle);
         char* path = just_get_live_view(device_handle_handle);
-        printf("path: %s\n", path);
+        printf("Original path: %s\n", path);
+
+        /* New code for renaming file */
+        char new_path[1024];  // Buffer for new path
+        
+        // Find last directory separator (works for both Unix and Windows)
+        char* last_slash = strrchr(path, '/');
+        char* last_backslash = strrchr(path, '\\');
+        char* separator = (last_backslash > last_slash) ? last_backslash : last_slash;
+
+        if (separator) {
+            // If path contains directory, preserve it and replace filename
+            size_t dir_length = separator - path + 1;
+            snprintf(new_path, sizeof(new_path), "%.*slive_image.JPG", (int)dir_length, path);
+        } else {
+            // If no directory, use new filename directly
+            strncpy(new_path, "live_image.JPG", sizeof(new_path));
+        }
+
+        // Perform the rename operation
+        if (rename(path, new_path) != 0) {
+            fprintf(stderr, "Error renaming file: %s\n", strerror(errno));
+        } else {
+            printf("Renamed to: %s\n", new_path);
+        }
+
         sdk_change_saving_destination_to_camera(device_handle_handle);
     }
 }
