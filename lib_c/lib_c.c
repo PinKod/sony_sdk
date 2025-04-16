@@ -48,7 +48,7 @@ char* get_live_veiw(void* device_handle_handle) {
 
     #define  BUFF_SIZE_IMAGE_INFO 1048576  //  1024 * 1024
     static unsigned char image_buff[BUFF_SIZE_IMAGE_INFO];
-    fprintf(stderr, "BUFF_SIZE_IMAGE_INFO = 1048576 < %lld = buffer_size\n", buffer_size);
+    fprintf(stderr, "BUFF_SIZE_IMAGE_INFO = 1048576 < %d = buffer_size\n", buffer_size);
     memset(image_buff, 0, BUFF_SIZE_IMAGE_INFO);
     sdk_set_size_image_data_block(image_data_block_handle, buffer_size);
     sdk_set_data_image_data_block(image_data_block_handle, image_buff);
