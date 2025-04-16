@@ -120,7 +120,7 @@ long int sdk_get_live_view_image_info(void* device_handle_handle, void* image_in
 
 //CrError GetLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*out*/CrLiveViewProperty** properties, /*out*/ CrInt32* numOfProperties);
 long int sdk_get_live_view_properties(void* device_handle_handle, void** deummy_data, int* dummy_int) {
-    return (long int) SCRSDK::GetLiveViewProperties((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrLiveViewProperty**)deummy_data, (CrInt32*)dummy_int);
+    return (long int) SCRSDK::GetLiveViewProperties(reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle), (SCRSDK::CrLiveViewProperty**)deummy_data, (CrInt32*)dummy_int);
 }
 
 //CrError GetSelectLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrInt32u numOfCodes, /*in*/ CrInt32u* codes, /*out*/CrLiveViewProperty** properties, /*out*/ CrInt32* numOfProperties);
