@@ -51,10 +51,9 @@ int main() {
         printf("error: %ld\n", connect_result);
         exit(EXIT_FAILURE);
     }
-        
 
-
-
+    sleep(2);
+    timed_loop(device_handle_handle);
 
 
     sdk_camera_object_info_release(camera_info);

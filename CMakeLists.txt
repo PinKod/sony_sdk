@@ -118,17 +118,17 @@ target_link_libraries(sample_app PRIVATE
 
 file(GLOB LIVE_IMAGE_SOURCES "live_image_service/*.c")
 # Live Image Service executable
-add_executable(live_image_service_exe 
+add_executable(live_image_service 
     ${LIVE_IMAGE_SOURCES}
 )
 
-target_include_directories(live_image_service_exe PRIVATE 
+target_include_directories(live_image_service PRIVATE 
     ${CMAKE_SOURCE_DIR}/c++_wrapper 
     ${CMAKE_SOURCE_DIR}/classes_methods 
     ${CMAKE_SOURCE_DIR}/utils
 )
-add_dependencies(live_image_service_exe copy_libs)
-target_link_libraries(live_image_service_exe PRIVATE 
+add_dependencies(live_image_service copy_libs)
+target_link_libraries(live_image_service PRIVATE 
     wrapper 
     utils
     # Add these if you need direct linking to SDK libs
