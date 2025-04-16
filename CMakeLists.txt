@@ -101,7 +101,12 @@ add_executable(sample_app
     ${APP_SOURCES}
 )
 
-target_include_directories(sample_app PRIVATE ${CMAKE_SOURCE_DIR}/c++_wrapper ${CMAKE_SOURCE_DIR}/classes_methods ${CMAKE_SOURCE_DIR}/utils)
+target_include_directories(sample_app PRIVATE 
+    ${CMAKE_SOURCE_DIR}/c++_wrapper 
+    ${CMAKE_SOURCE_DIR}/classes_methods 
+    ${CMAKE_SOURCE_DIR}/utils
+)
+
 add_dependencies(sample_app copy_libs)
 target_link_libraries(sample_app PRIVATE 
     wrapper 
@@ -127,11 +132,11 @@ target_link_libraries(live_image_service_exe PRIVATE
     wrapper 
     utils
     # Add these if you need direct linking to SDK libs
-    Cr_Core
-    Cr_PTP_IP
-    Cr_PTP_USB
-    monitor_protocol
-    monitor_protocol_pf
-    ssh2
-    usb-1.0
+    # Cr_Core
+    # Cr_PTP_IP
+    # Cr_PTP_USB
+    # monitor_protocol
+    # monitor_protocol_pf
+    # ssh2
+    # usb-1.0
 )
