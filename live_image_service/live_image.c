@@ -82,7 +82,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    sleep(2);
+    sleep(4);
     timed_loop(device_handle_handle);
 
 
