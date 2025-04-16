@@ -33,7 +33,7 @@ long int sdk_release() {
     }
     return 0;
 }
-  
+
 long int sdk_enum_camera_object(void** enum_camera_object_handle) {
     SCRSDK::ICrEnumCameraObjectInfo* camera_list = nullptr;
     auto res = SCRSDK::EnumCameraObjects(&camera_list);
@@ -115,7 +115,7 @@ long int sdk_get_live_view_image(void* device_handle_handle, void* image_data_bl
 
 //CrError GetLiveViewImageInfo(/*in*/ CrDeviceHandle deviceHandle, /*out*/ CrImageInfo* info);
 long int sdk_get_live_view_image_info(void* device_handle_handle, void* image_info_handle) {
-    return (long int) SCRSDK::GetLiveViewImageInfo((SCRSDK::CrDeviceHandle)device_handle_handle, (SCRSDK::CrImageInfo*)image_info_handle);
+    return (long int) SCRSDK::GetLiveViewImageInfo(reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle), (SCRSDK::CrImageInfo*)image_info_handle);
 }
 
 //CrError GetLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*out*/CrLiveViewProperty** properties, /*out*/ CrInt32* numOfProperties);
