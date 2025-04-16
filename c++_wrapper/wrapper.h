@@ -45,7 +45,7 @@ long int sdk_get_live_view_image(void* device_handle_handle, void* image_data_bl
 //CrError GetLiveViewImageInfo(/*in*/ CrDeviceHandle deviceHandle, /*out*/ CrImageInfo* info);
 long int sdk_get_live_view_image_info(void* device_handle_handle, void* image_info_handle);
 //CrError GetLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*out*/CrLiveViewProperty** properties, /*out*/ CrInt32* numOfProperties);
-long int sdk_get_live_view_properties(void* device_handle_handle, void** deummy_data, int* dummy_int);
+long int sdk_get_live_view_properties(void* device_handle_handle, void** deummy_data, long long int* dummy_int);
 //CrError GetSelectLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrInt32u numOfCodes, /*in*/ CrInt32u* codes, /*out*/CrLiveViewProperty** properties, /*out*/ CrInt32* numOfProperties);
 long int sdk_get_select_live_view_properties(void* device_handle_handle, long int number_of_codes, long int* codes, void** deummy_data, long int* number_of_properties);
 //CrError ReleaseLiveViewProperties(/*in*/ CrDeviceHandle deviceHandle, /*in*/CrLiveViewProperty* properties);
