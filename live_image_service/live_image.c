@@ -1,6 +1,7 @@
 #include "./../c++_wrapper/wrapper.h"
 #include "./../classes_methods/classes_methods.h"
 #include "./../utils/utils.h"
+#include "./../lib_c/lib_c.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +19,7 @@ void timed_loop(void* device_handle_handle) {
     int c = 0;
     while(c++ < 100) {
         sdk_change_saving_destination_to_host_pc(device_handle_handle);
-        char* path = just_get_live_view(device_handle_handle);
+        char* path = get_live_veiw(device_handle_handle);
         printf("Original path: %s\n", path);
 
         /* New code for renaming file */

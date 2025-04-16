@@ -94,6 +94,25 @@ target_link_libraries(utils PRIVATE
 add_dependencies(utils copy_libs)
 
 
+file(GLOB LIB_C_SOURCES "lib_c/*.c")
+# Utility library
+add_library(lib_c SHARED
+    ${LIB_C_SOURCES}
+)
+target_include_directories(lib_c PRIVATE ${CMAKE_SOURCE_DIR}/lib_c) 
+target_link_directories(lib_c PRIVATE ${CMAKE_BINARY_DIR}/bin)
+target_link_libraries(lib_c PRIVATE
+    Cr_Core
+    Cr_PTP_IP
+    Cr_PTP_USB
+    monitor_protocol
+    monitor_protocol_pf
+    ssh2
+    usb-1.0
+)
+add_dependencies(lib_c copy_libs)
+
+
 
 file(GLOB APP_SOURCES "app/*.c")
 # Sample application
@@ -126,11 +145,13 @@ target_include_directories(live_image_service PRIVATE
     ${CMAKE_SOURCE_DIR}/c++_wrapper 
     ${CMAKE_SOURCE_DIR}/classes_methods 
     ${CMAKE_SOURCE_DIR}/utils
+    ${CMAKE_SOURCE_DIR}/lib_c
 )
 add_dependencies(live_image_service copy_libs)
 target_link_libraries(live_image_service PRIVATE 
     wrapper 
     utils
+    lib_c
     # Add these if you need direct linking to SDK libs
     # Cr_Core
     # Cr_PTP_IP
@@ -140,3 +161,5 @@ target_link_libraries(live_image_service PRIVATE
     # ssh2
     # usb-1.0
 )
+
+
