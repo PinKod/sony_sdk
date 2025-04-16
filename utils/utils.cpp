@@ -14,6 +14,7 @@
 #include <cstring>
 #include <string>
 #include <codecvt>
+#include <cstdlib>
 
 
 namespace fs = std::filesystem;
@@ -215,10 +216,15 @@ time_stream << std::put_time(&now_tm, "%Y_%m_%d_%H_%M_%S")
         file.close();
     }
     std::cout << "GetLiveView SUCCESS\n";
-    // delete[] image_buff; // Release
-    auto res_path = new std::string();
-    res_path->copy((char*) path.c_str(), strlen(path.c_str()), 0);
-    return (char*) res_path->c_str(); //return image data block
+    delete image_data; // Release
+    // Convert the path to a C-style string
+    std::string path_str = path.string(); // Get the full path as a std::string
+    char* result = static_cast<char*>(malloc(path_str.size() + 1)); // Allocate memory
+    if (result) {
+        strcpy(result, path_str.c_str()); // Copy the string
+    }
+
+    return result;
 }
 
 
