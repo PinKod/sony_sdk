@@ -28,7 +28,7 @@ int main() {
         perror("SDK initialization failed\n");
         exit(999);
     }
-
+    sleep(4);
     void* enum_handle = NULL;
     long int enum_result = sdk_enum_camera_object(&enum_handle);
     if (enum_result) {

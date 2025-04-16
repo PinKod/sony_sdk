@@ -218,10 +218,10 @@ time_stream << std::put_time(&now_tm, "%Y_%m_%d_%H_%M_%S")
     std::cout << "GetLiveView SUCCESS\n";
     delete image_data; // Release
     // Convert the path to a C-style string
-    std::string path_str = path.string(); // Get the full path as a std::string
-    char* result = static_cast<char*>(malloc(path_str.size() + 1)); // Allocate memory
+    std::string path_strr = path.string(); // Get the full path as a std::string
+    char* result = static_cast<char*>(malloc(path_strr.size() + 1)); // Allocate memory
     if (result) {
-        strcpy(result, path_str.c_str()); // Copy the string
+        strcpy(result, path_strr.c_str()); // Copy the string
     }
 
     return result;
