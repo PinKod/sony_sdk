@@ -231,7 +231,7 @@ unsigned long sdk_get_frame_no_image_data_block(void* image_data_block_handle) {
     );
 }
 
-void sdk_set_size_image_data_block(void* image_data_block_handle, unsigned long size) {
+void sdk_set_size_image_data_block(void* image_data_block_handle, CrInt32u size) {
     reinterpret_cast<SCRSDK::CrImageDataBlock*>(image_data_block_handle)->SetSize(
         static_cast<CrInt32u>(size)
     );
@@ -255,7 +255,7 @@ unsigned char* sdk_get_image_data_image_data_block(void* image_data_block_handle
     );
 }
 
-unsigned long sdk_get_image_size_image_data_block(void* image_data_block_handle) {
+CrInt32u sdk_get_image_size_image_data_block(void* image_data_block_handle) {
     return static_cast<unsigned long>(
         reinterpret_cast<SCRSDK::CrImageDataBlock*>(image_data_block_handle)->GetImageSize()
     );

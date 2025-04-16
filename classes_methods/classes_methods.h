@@ -65,11 +65,11 @@ unsigned char* sdk_get_set_values_device_property(void* device_property_handle);
 void* sdk_construct_image_data_block();
 void sdk_destruct_image_data_block(void* image_data_block_handle);
 unsigned long sdk_get_frame_no_image_data_block(void* image_data_block_handle);
-void sdk_set_size_image_data_block(void* image_data_block_handle, unsigned long size);
+void sdk_set_size_image_data_block(void* image_data_block_handle, CrInt32u size);
 unsigned long sdk_get_size_image_data_block(void* image_data_block_handle);
 void sdk_set_data_image_data_block(void* image_data_block_handle, unsigned char* data);
 unsigned char* sdk_get_image_data_image_data_block(void* image_data_block_handle);
-unsigned long sdk_get_image_size_image_data_block(void* image_data_block_handle);
+CrInt32u sdk_get_image_size_image_data_block(void* image_data_block_handle);
 unsigned long sdk_get_time_code_image_data_block(void* image_data_block_handle);
 //wrapper for class SCRSDK_API CrImageDataBlock
 
