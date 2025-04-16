@@ -18,7 +18,6 @@ void timed_loop(void* device_handle_handle) {
     // volatile int* flag = 1;
     int c = 0;
     while(c++ < 100) {
-        sdk_change_saving_destination_to_host_pc(device_handle_handle);
         char* path = get_live_veiw(device_handle_handle);
         if(!path) {
             sdk_change_saving_destination_to_camera(device_handle_handle);
@@ -49,8 +48,6 @@ void timed_loop(void* device_handle_handle) {
         } else {
             printf("Renamed to: %s\n", new_path);
         }
-
-        sdk_change_saving_destination_to_camera(device_handle_handle);
     }
 }
 
