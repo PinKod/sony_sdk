@@ -101,8 +101,18 @@ int sdk_change_saving_destination_to_camera(void* device_handle_handle) {
     return (int)SCRSDK::SetDeviceProperty(m_device_handle, &prop);
 }
 
+int sdk_change_saving_destination_to_host_pc(void* device_handle_handle) {
+    SCRSDK::CrDeviceHandle m_device_handle = reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle);
+    SCRSDK::CrDeviceProperty prop;
+    prop.SetCode(SCRSDK::CrDevicePropertyCode::CrDeviceProperty_StillImageStoreDestination);
+    // prop.SetCurrentValue(SCRSDK::CrStillImageStoreDestination_MemoryCard);
+    prop.SetCode(SCRSDK::CrStillImageStoreDestination_HostPC);
+    prop.SetValueType(SCRSDK::CrDataType_UInt16Array);
+    return (int)SCRSDK::SetDeviceProperty(m_device_handle, &prop);
+}
 
-void* just_get_live_view(void* device_handle_handle) {
+
+char* just_get_live_view(void* device_handle_handle) {
     SCRSDK::CrDeviceHandle m_device_handle = reinterpret_cast<SCRSDK::CrDeviceHandle>(device_handle_handle);
     long signed int tmp = 123;
     printf("xe:%ld\n" , *(long signed int*)((void*)&tmp));
@@ -205,8 +215,7 @@ time_stream << std::put_time(&now_tm, "%Y_%m_%d_%H_%M_%S")
         file.close();
     }
     std::cout << "GetLiveView SUCCESS\n";
-    // delete[] image_buff; // Release
-    return (void*)(image_data); //return image data block
+    return (char*) path.c_str(); //return image data block
 }
 
 

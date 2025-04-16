@@ -12,7 +12,10 @@ void sdk_save_image(void* image_data_block_handle);
 void sdk_set_device_propery_time(void* device_handle_handle, void* device_property_handle);
 void sdk_capture_image(void* device_handle_handle, char* meta_info);
 int sdk_change_saving_destination_to_camera(void* device_handle_handle);
-void* just_get_live_view(void* device_handle_handle);
+int sdk_change_saving_destination_to_host_pc(void* device_handle_handle);
+
+
+char* just_get_live_view(void* device_handle_handle);
 
 
 
