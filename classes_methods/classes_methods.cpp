@@ -178,8 +178,9 @@ void sdk_set_value_size_device_property(void* device_property_handle, unsigned l
 }
 
 unsigned long sdk_get_value_size_device_property(void* device_property_handle) {
+    SCRSDK::CrDeviceProperty prop = *reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle);
     return static_cast<unsigned long>(
-        reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle)->GetValueSize()
+        prop.GetValueSize()
     );
 }
 

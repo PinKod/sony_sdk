@@ -152,14 +152,27 @@ target_link_libraries(live_image_service PRIVATE
     wrapper 
     utils
     lib_c
-    # Add these if you need direct linking to SDK libs
-    # Cr_Core
-    # Cr_PTP_IP
-    # Cr_PTP_USB
-    # monitor_protocol
-    # monitor_protocol_pf
-    # ssh2
-    # usb-1.0
 )
 
 
+
+
+
+file(GLOB ISO_SERVICE "iso_service/*.c")
+# Live Image Service executable
+add_executable(iso_service 
+    ${ISO_SERVICE}
+)
+
+target_include_directories(iso_service PRIVATE 
+    ${CMAKE_SOURCE_DIR}/c++_wrapper 
+    ${CMAKE_SOURCE_DIR}/classes_methods 
+    ${CMAKE_SOURCE_DIR}/utils
+    ${CMAKE_SOURCE_DIR}/lib_c
+)
+add_dependencies(iso_service copy_libs)
+target_link_libraries(iso_service PRIVATE 
+    wrapper 
+    utils
+    lib_c
+)

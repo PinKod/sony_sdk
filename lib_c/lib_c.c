@@ -117,3 +117,44 @@ char* get_live_veiw(void* device_handle_handle) {
     strcpy(return_path, full_path);
     return return_path;
 }
+
+
+
+
+//will allocate memory for iso_array
+long int get_iso_array(void* device_handle_handle, int* iso_writable, unsigned int* iso_current, unsigned int* iso_array, unsigned int* iso_array_len) {
+    long nprop = 0;
+    void* iso_device_property_handle = NULL;
+    long codes = 260U;
+    long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &codes, &iso_device_property_handle, &nprop);
+    if(get_prop_result) {
+        fprintf(stderr, "Get_iso_array FAILED 1      err:%ld\n", get_prop_result);
+        return get_prop_result;
+    }
+    printf("iso_device_property_handle: %p\n", iso_device_property_handle);
+    
+
+
+    unsigned long size = sdk_get_value_size_device_property(iso_device_property_handle);
+    int number_values = 0;
+    number_values = size / sizeof(unsigned int);
+    *iso_writable = sdk_is_set_enable_device_property(iso_device_property_handle);
+    *iso_current = sdk_get_current_value_device_property(iso_device_property_handle);
+    if(number_values <= 0) {
+        printf("value size: %ld\n", size);
+        return -1;
+    }
+
+    iso_array = malloc(sizeof(unsigned int) * number_values);
+    if(!iso_array) {
+        return -2;
+    }
+
+    *iso_array_len = number_values;
+    unsigned int const* source = (unsigned int const*)sdk_get_values_device_property(iso_device_property_handle);
+    for(int i = 0; i < number_values; ++i, ++source) {
+        memcpy(&iso_array[i], source, sizeof(unsigned int));
+    }
+
+    return 0;
+}
