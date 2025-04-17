@@ -146,7 +146,7 @@ long int sdk_set_device_setting(void* device_handle_handle, long int key, long i
 //CrError SetSaveInfo(/*in*/ CrDeviceHandle deviceHandle, /*in*/ CrChar *path, CrChar* prefix, CrInt32 no);
 long int sdk_set_save_info(void* device_handle_handle, char* path, char* prefix, long int no) {
     return (long int) SCRSDK::SetSaveInfo((SCRSDK::CrDeviceHandle)device_handle_handle, path, prefix, (CrInt32)no);
-}
+}ч
 
 //CrInt32u GetSDKVersion();
 long int sdk_get_sdk_version() {
