@@ -1,33 +1,31 @@
 #include "./../c++_wrapper/wrapper.h"
 #include "./../classes_methods/classes_methods.h"
-#include "./../utils/utils.h"
 #include "./../lib_c/lib_c.h"
+#include "./../utils/utils.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
 //#define _POSIX_C_SOURCE 199309L
 #include <time.h>
 
-
-
 void timed_loop(void* device_handle_handle) {
     // volatile int* flag = 1;
     int c = 0;
-    while(c++ < 100) {
+    while (c++ < 100) {
         char* path = get_live_veiw(device_handle_handle);
-        if(!path) {
+        if (!path) {
             sdk_change_saving_destination_to_camera(device_handle_handle);
             continue;
         }
         printf("Original path: %s\n", path);
 
         /* New code for renaming file */
-        char new_path[1024];  // Buffer for new path
-        
+        char new_path[1024]; // Buffer for new path
+
         // Find last directory separator (works for both Unix and Windows)
         char* last_slash = strrchr(path, '/');
         char* last_backslash = strrchr(path, '\\');
@@ -56,7 +54,7 @@ int main() {
         perror("SDK initialization failed\n");
         exit(999);
     }
-    void* enum_handle = NULL;
+    void*    enum_handle = NULL;
     long int enum_result = sdk_enum_camera_object(&enum_handle);
     if (enum_result) {
         perror("Failed to enumerate cameras\n");
@@ -71,9 +69,9 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    void* device_handle_handle = NULL;
+    void*    device_handle_handle = NULL;
     long int connect_result = sdk_connect(camera_info, NULL, &device_handle_handle);
-    if(connect_result) {
+    if (connect_result) {
         perror("Failed to connect to camera\n");
         printf("error: %ld\n", connect_result);
         exit(EXIT_FAILURE);
@@ -81,7 +79,6 @@ int main() {
 
     sleep(4);
     timed_loop(device_handle_handle);
-
 
     sdk_camera_object_info_release(camera_info);
     if (sdk_release()) {

@@ -1,140 +1,198 @@
-    
-#define  BUFF_SIZE_IMAGE_INFO 1048576  //  1024 * 1024
+#include "./../c++_wrapper/wrapper.h"
+#include "./../lib_c/lib_c.h"
+#include "./sony_properties.h"
 
-void* device_handle_handle=NULL;
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
+#define BUFF_SIZE_IMAGE_INFO 1048576 //  1024 * 1024
 
-int get_live_veiw_to_file(void* device_handle_handle, char* filename) {
+void* device_handle_handle = NULL;
 
-    static unsigned char image_buff[BUFF_SIZE_IMAGE_INFO];
-
-    void* image_info_handle = sdk_construct_image_info();
-    long int info_result = sdk_get_live_view_image_info(device_handle_handle, image_info_handle);
-    if(info_result) {
-        fprintf(stderr, "GetLiveView FAILED 1      err:%ld\n", info_result);
-        return -1;
-    }
-
-    CrInt32u buffer_size = sdk_get_buffer_size_image_info(image_info_handle);
-    if(buffer_size < 1) {
-        fprintf(stderr, "GetLiveView FAILED 2      size:%d\n", buffer_size);
-        return -2;
-    }
-
-
-    void* image_data_block_handle = sdk_construct_image_data_block();
-    if(!image_data_block_handle) {
-        fprintf(stderr, "GetLiveView FAILED 3      allocation failed\n");
-        return NULL;
-    }
-
-
-    fprintf(stderr, "BUFF_SIZE_IMAGE_INFO = 1048576 <> %d = buffer_size\n", buffer_size);
-    if(buffer_size > BUFF_SIZE_IMAGE_INFO) {
-        perror("not enougth buffer for image\n");
-    }
-
-
-    memset(image_buff, 0, BUFF_SIZE_IMAGE_INFO);
-    sdk_set_size_image_data_block(image_data_block_handle, buffer_size);
-    sdk_set_data_image_data_block(image_data_block_handle, image_buff);
-
-    
-    long int live_view_result = sdk_get_live_view_image(device_handle_handle, image_data_block_handle);
-    if(live_view_result) {
-        if(live_view_result == 131095) {
-            fprintf(stderr, "GetLiveView FAILED 4      Warning. GetLiveView Frame NotUpdate\n");
+void proc_liveview() {
+    if (get_live_veiw_to_file(device_handle_handle, tmplvFile) > 0) {
+        if (rename(tmplvFile, lvFile) != 0) {
+            fprintf(stderr, "Error file rename:%s\n", tmplvFile);
         }
-        else if(live_view_result == 33539) {
-            fprintf(stderr, "GetLiveView FAILED 4      Warning. GetLiveView Memory insufficient\n");
+    }
+}
+
+void write_lists_to_file(unsigned int code, int table_count, char* file_name, unsigned int* table_codes, char** table_list) {
+    FILE* file = fopen(TEMPORARY_FILE, "w");
+    if (!file) {
+        perror("err 0\n");
+        return;
+    }
+
+
+    int           writable = -1;
+    unsigned int  current = 0;
+    unsigned int  array_len = 0;
+    long int      get_result = 0;
+    unsigned int* array = get_property_array(code, device_handle_handle, &writable, &current, &array_len, &get_result);
+    if (get_result) {
+        fclose(file);
+        perror("err 1\n");
+        printf("code: %d\n", code);
+        return;
+    }
+
+
+    if(code == FOCUS_MODE_CODE) {   ///focus mode setting dont work properly
+        for (unsigned int i = 0; i < array_len; i++) {
+            fprintf(file, "%s\n", table_list[i]);
         }
-        else {
-            fprintf(stderr, "GetLiveView FAILED 4      allocation failed\n");
-        }
-
-        sdk_destruct_image_data_block(image_data_block_handle);
-        return NULL;
-    }
-
-
-    if(sdk_get_size_image_data_block(image_data_block_handle) == 0) {
-        fprintf(stderr, "GetLiveView FAILED 5      image size: 0\n");
-        sdk_destruct_image_data_block(image_data_block_handle);
-        return NULL;
-    }
-
-
-
-    size_t path_max_size = 256;
-    struct timeval tv;
-    struct tm tm_info;
-    char time_str[80];
-    char filename[128];
-    char cwd[path_max_size];
-    char full_path[path_max_size * 2];
-    if (getcwd(cwd, sizeof(cwd)) == NULL) {
-        perror("getcwd() error");
-        exit(EXIT_FAILURE);
-    }
-
-
-    
-    FILE* file = fopen(filename, "wb");
-    if(file == NULL) {
-        fprintf(stderr, "GetLiveView FAILED 6      can't open file:%s\n", full_path);
-        sdk_destruct_image_data_block(image_data_block_handle);
-        return NULL;
     }
     
-    fwrite(sdk_get_image_data_image_data_block(image_data_block_handle), 1, buffer_size, file);
+
+    for (unsigned int i = 0; i < array_len; i++) {
+        unsigned int array_i = array[i];
+        for (int j = 0; j < table_count; j++) {
+            if (array_i == table_codes[j]) {
+                fprintf(file, "%s\n", table_list[j]);
+                break;
+            }
+        }
+    }
     fclose(file);
-
-    sdk_destruct_image_data_block(image_data_block_handle);
-
-    return buffer_size;
+    rename(TEMPORARY_FILE, file_name);
 }
 
+void proc_dump_lists() {
+    // clang-format off
+    write_lists_to_file(FOCUS_MODE_CODE, FOCUS_MODE_TABLE_COUNT, LIST_FOCUS_MODE_FILE, FOCUS_MODE_TABLE_API_CODES, FOCUS_MODE_TABLE_API_LIST);
+    write_lists_to_file(SHOOT_MODE_CODE, SHOOT_MODE_TABLE_COUNT, LIST_SHOOT_MODE_FILE, SHOOT_MODE_TABLE_API_CODES, SHOOT_MODE_TABLE_API_LIST);
+    write_lists_to_file(ISO_CODE,        ISO_TABLE_COUNT,        LIST_ISO_FILE,               ISO_TABLE_API_CODES,        ISO_TABLE_API_LIST);
+    // clang-format on
+}
+
+void write_current_setting_to_file(unsigned int code, unsigned int value_type, int table_count, char* file_name, unsigned int* table_codes, char** table_list) {
+    FILE* file = fopen(TEMPORARY_FILE, "w");
+    if (!file) {
+        perror("err 0\n");
+        return;
+    }
+    
+    unsigned int current_value;
+    int err = get_current_value_property(code, device_handle_handle, &current_value);
+    if(err) {
+        fprintf(stderr, "code: %d, get current value err: %d\n", code, err);
+        fclose(file);
+        return;
+    }
 
 
-proc_liveview()
-{ 
-       if get_live_veiw_to_file(device_handle_handle, tmplvFile)>0
-       {
+    for(int i = 0; i < table_count; i++) {
+        if(table_codes[i] == current_value) {
+            fprintf(file, "%s\n", table_list[i]);
+            break;
+        }
+    }
+    fclose(file);
+    rename(TEMPORARY_FILE, file_name);
+}
 
-           if (rename(tmplvFile, lvFile) != 0) 
-           {
-               fprintf(stderr, "Error file rename:%s\n", tmplvFile);
-           }
+void proc_dump_current_settings() {
+    // clang-format off
+    write_current_setting_to_file(FOCUS_MODE_CODE, FOCUS_MODE_TYPE,       FOCUS_MODE_TABLE_COUNT, NFO_FOCUS_MODE_FILE, FOCUS_MODE_TABLE_API_CODES, FOCUS_MODE_TABLE_API_LIST);
+    write_current_setting_to_file(SHOOT_MODE_CODE, SHOOT_MODE_VALUE_TYPE, SHOOT_MODE_TABLE_COUNT, NFO_SHOOT_MODE_FILE, SHOOT_MODE_TABLE_API_CODES, SHOOT_MODE_TABLE_API_LIST);
+    write_current_setting_to_file(ISO_CODE,        ISO_VALUE_TYPE,        ISO_TABLE_COUNT,        NFO_ISO_FILE,               ISO_TABLE_API_CODES,        ISO_TABLE_API_LIST);
+    // clang-format on
+}
 
-       }
+void new_setting_from_file(unsigned int code, unsigned int value_type, int table_count, char* file_name, unsigned int* table_codes, char** table_list) {
+    FILE* file = fopen(file_name, "r");
+    
+    if(!file) {
+        return;
+    }
+
+    char new_setting[128];
+    int          res = fscanf(file, "%s", new_setting);
+    fclose(file);
+    printf("remove res: %d\n", remove(file_name));
+    if (res != 1) {
+        return;
+    }
+
+
+    int           writable = -1;
+    unsigned int  current = 0;
+    unsigned int  array_len = 0;
+    long int      get_result = 0;
+    unsigned int* array = get_property_array(code, device_handle_handle, &writable, &current, &array_len, &get_result);
+    if (get_result) {
+        printf("Failed to get array for: %d\n", code);
+        printf("error: %ld\n", get_result);
+        return;
+    }
+
+    int flag_0 = 0;
+    int new_setting_i = -1;
+    for(int i = 0; i < table_count; i++) {
+        if(strcmp(new_setting, table_list[i]) == 0) {
+            flag_0 = 1;
+            new_setting_i = i;
+            break;
+        }
+    }
+    if(flag_0 == 0) {
+        return;
+    }
+
+
+    int flag = 0;
+    unsigned int new_setting_unsigned = 0;
+    for (unsigned int i = 0; i < array_len; i++) {
+        if (array[i] == table_codes[new_setting_i]) {
+            flag = 1;
+            new_setting_unsigned = array[i];
+            break;
+        }
+    }
+    if (flag == 0) {
+        printf("Invalid: %s\n", new_setting);
+        return;
+    }
+
+
+    long set_res = set_value_property(code, device_handle_handle, new_setting_unsigned, value_type);
+    if (set_res) {
+        printf("error");
+    }
+
     
 }
 
-proc_dump_lists()
-{
-   get_opts_to_file(OPT_ID_ISO,listISOFile);
-   get_opts_to_file(OPT_ID_WB,listWBFile);
+void proc_set_setting() {
+    // clang-format off
+    new_setting_from_file(FOCUS_MODE_CODE, FOCUS_MODE_TYPE,       FOCUS_MODE_TABLE_COUNT, SET_FOCUS_MODE_FILE, FOCUS_MODE_TABLE_API_CODES, FOCUS_MODE_TABLE_API_LIST);
+    new_setting_from_file(SHOOT_MODE_CODE, SHOOT_MODE_VALUE_TYPE, SHOOT_MODE_TABLE_COUNT, SET_SHOOT_MODE_FILE, SHOOT_MODE_TABLE_API_CODES, SHOOT_MODE_TABLE_API_LIST);
+    new_setting_from_file(ISO_CODE,        ISO_VALUE_TYPE,        ISO_TABLE_COUNT,        SET_ISO_FILE,               ISO_TABLE_API_CODES,        ISO_TABLE_API_LIST);
+    // clang-format on
 }
 
+int main(int argc, char** argv) {
+    device_handle_handle = init_sdk__get_device_handle_handle();
 
+    sleep(1);
 
-int main(int argc, char ** argv)
-{
-  device_handle_handle=init_sdk__get_device_handle_handle();
+    printf("Init complete\n");
 
-  sleep(1);
+    int i = 0;
+    while (i++ < 100000) {
+        proc_liveview();
+        proc_dump_lists();
+        proc_dump_current_settings();
+        proc_set_setting();
+        usleep(100000);
+    }
 
-  printf("Init complete\n");
-
-  while(1)
-  {
-    proc_liveview();
-    proc_dump_lists();
-    proc_dump_opts();
-    proc_set_opts();
-    usleep(10000);
-  }
-
-
-  close_camera(&ptp_usb, &params, dev);
+    sdk_release();
 }

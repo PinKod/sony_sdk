@@ -345,3 +345,28 @@ target_link_libraries(shutter_speed_service PRIVATE
     utils
     lib_c
 )
+
+
+
+
+
+
+
+file(GLOB CAMERA_SERVICE "camera_service/*.c")
+# Live Image Service executable
+add_executable(camera_service 
+    ${CAMERA_SERVICE}
+)
+
+target_include_directories(camera_service PRIVATE 
+    ${CMAKE_SOURCE_DIR}/c++_wrapper 
+    ${CMAKE_SOURCE_DIR}/classes_methods 
+    ${CMAKE_SOURCE_DIR}/utils
+    ${CMAKE_SOURCE_DIR}/lib_c
+)
+add_dependencies(camera_service copy_libs)
+target_link_libraries(camera_service PRIVATE 
+    wrapper 
+    utils
+    lib_c
+)

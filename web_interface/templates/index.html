@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Settings</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .setting-group { margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        h2 { color: #333; margin-top: 0; }
+        form { margin: 10px 0; }
+        select { padding: 5px; margin-right: 10px; }
+        button { padding: 5px 15px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        .current { color: #666; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Camera Settings Control</h1>
+    
+    {% for setting_name, data in settings.items() %}
+    <div class="setting-group">
+        <h2>{{ setting_name|title }} Settings</h2>
+        <div class="current">Current: {{ data.current }}</div>
+        <form method="POST">
+            <select name="{{ setting_name }}_select">
+                {% for option in data.options %}
+                <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="set_{{ setting_name }}">Set {{ setting_name|title }}</button>
+        </form>
+    </div>
+    {% endfor %}
+</body>
+</html>
