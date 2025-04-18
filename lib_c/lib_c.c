@@ -12,6 +12,10 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
 
 char* get_live_veiw(void* device_handle_handle) {
     void* image_info_handle = sdk_construct_image_info();
@@ -122,14 +126,15 @@ char* get_live_veiw(void* device_handle_handle) {
 
 
 //will allocate memory for iso_array
-long int get_iso_array(void* device_handle_handle, int* iso_writable, unsigned int* iso_current, unsigned int* iso_array, unsigned int* iso_array_len) {
+unsigned int* get_iso_array(void* device_handle_handle, int* iso_writable, unsigned int* iso_current, unsigned int* iso_array_len, long int* iso_get_result) {
     long nprop = 0;
     void* iso_device_property_handle = NULL;
     long codes = 260U;
     long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &codes, &iso_device_property_handle, &nprop);
     if(get_prop_result) {
         fprintf(stderr, "Get_iso_array FAILED 1      err:%ld\n", get_prop_result);
-        return get_prop_result;
+        *iso_get_result = get_prop_result;
+        return NULL;
     }
     printf("iso_device_property_handle: %p\n", iso_device_property_handle);
     
@@ -142,19 +147,174 @@ long int get_iso_array(void* device_handle_handle, int* iso_writable, unsigned i
     *iso_current = sdk_get_current_value_device_property(iso_device_property_handle);
     if(number_values <= 0) {
         printf("value size: %ld\n", size);
-        return -1;
+        *iso_get_result = -1;
+        return NULL;
     }
 
-    iso_array = malloc(sizeof(unsigned int) * number_values);
-    if(!iso_array) {
-        return -2;
+    unsigned int* iso_array_tmp = malloc(sizeof(unsigned int) * number_values);
+    if(!iso_array_tmp) {
+        *iso_get_result = -2;
+        return NULL;
     }
 
     *iso_array_len = number_values;
     unsigned int const* source = (unsigned int const*)sdk_get_values_device_property(iso_device_property_handle);
     for(int i = 0; i < number_values; ++i, ++source) {
-        memcpy(&iso_array[i], source, sizeof(unsigned int));
+        // printf("%d\n", *source);
+        memcpy(&iso_array_tmp[i], source, sizeof(unsigned int));
     }
 
+    return iso_array_tmp;
+}
+
+
+
+unsigned int* get_property_array(long property_code, void* device_handle_handle, int* abstract_writable, unsigned int* abstract_current, unsigned int* abstract_array_len, long int* abstract_get_result) {
+    long nprop = 0;
+    void* abstract_device_property_handle = NULL;
+    long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &property_code, &abstract_device_property_handle, &nprop);
+    if(get_prop_result) {
+        fprintf(stderr, "Get_abstract_array FAILED 1      err:%ld\n", get_prop_result);
+        *abstract_get_result = get_prop_result;
+        return NULL;
+    }
+    printf("abstract_device_property_handle: %p\n", abstract_device_property_handle);
+    
+
+
+    unsigned long size = sdk_get_value_size_device_property(abstract_device_property_handle);
+    int number_values = 0;
+    number_values = size / sizeof(unsigned int);
+    *abstract_writable = sdk_is_set_enable_device_property(abstract_device_property_handle);
+    *abstract_current = sdk_get_current_value_device_property(abstract_device_property_handle);
+    if(number_values <= 0) {
+        printf("value size: %ld\n", size);
+        *abstract_get_result = -1;
+        return NULL;
+    }
+
+    unsigned int* abstract_array_tmp = malloc(sizeof(unsigned int) * number_values);
+    if(!abstract_array_tmp) {
+        *abstract_get_result = -2;
+        return NULL;
+    }
+
+    *abstract_array_len = number_values;
+    unsigned int const* source = (unsigned int const*)sdk_get_values_device_property(abstract_device_property_handle);
+    for(int i = 0; i < number_values; ++i, ++source) {
+        // printf("%d\n", *source);
+        memcpy(&abstract_array_tmp[i], source, sizeof(unsigned int));
+    }
+
+    return abstract_array_tmp;
+}
+
+int get_current_value_property(long property_code, void* device_handle_handle, unsigned int* abstract_current) {
+    long nprop = 0;
+    void* abstract_device_property_handle = NULL;
+    long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &property_code, &abstract_device_property_handle, &nprop);
+    if(get_prop_result) {
+        fprintf(stderr, "Get_abstract_array FAILED 1      err:%ld\n", get_prop_result);
+        return -1;
+    }
+    printf("abstract_device_property_handle: %p\n", abstract_device_property_handle);
+    
+    *abstract_current = sdk_get_current_value_device_property(abstract_device_property_handle);
     return 0;
+}
+
+long set_value_property(long property_code, void* device_handle_handle, unsigned int value, unsigned int value_type) {
+    long nprop = 0;
+    void* abstract_device_property_handle = NULL;
+    long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &property_code, &abstract_device_property_handle, &nprop);
+    if(get_prop_result) {
+        fprintf(stderr, "Set value FAILED -1      check enable failed: err:%ld\n", get_prop_result);
+        return -3;
+    }
+    
+    if(sdk_is_set_enable_device_property(abstract_device_property_handle) == 1) {
+        fprintf(stderr, "Set value FAILED 0      not enable\n");
+        return -2;
+    }
+
+    void* prop = sdk_construct_device_property();
+    if(!prop) {
+        fprintf(stderr, "Set value FAILED 1      allocation failed\n");
+        return -1;
+    }
+
+    sdk_set_code_device_property(prop, property_code);
+    sdk_set_current_value_device_property(prop, value);
+    sdk_set_value_type_device_property(prop, value_type);
+    long set_property_result = sdk_set_device_property(device_handle_handle, prop);
+    if(set_property_result) {
+        fprintf(stderr, "Set value FAILED 2      err:%ld\n", set_property_result);
+        return set_property_result;
+    }
+    return 0;
+}
+
+
+void* init_sdk__get_device_handle_handle() {
+    if (sdk_init()) {
+        perror("SDK initialization failed\n");
+        exit(999);
+    }
+    void* enum_handle = NULL;
+    long int enum_result = sdk_enum_camera_object(&enum_handle);
+    if (enum_result) {
+        perror("Failed to enumerate cameras\n");
+        printf("error: %ld\n", enum_result);
+        exit(EXIT_FAILURE);
+    }
+
+    void* camera_info = sdk_enum_camera_object_get_camera_object_info(enum_handle, 0);
+    if (!camera_info) {
+        printf("Failed to get info for camera\n");
+        sdk_release();
+        exit(EXIT_FAILURE);
+    }
+
+    void* device_handle_handle = NULL;
+    long int connect_result = sdk_connect(camera_info, NULL, &device_handle_handle);
+    if(connect_result) {
+        perror("Failed to connect to camera\n");
+        printf("error: %ld\n", connect_result);
+        exit(EXIT_FAILURE);
+    }
+
+
+    sleep(1);
+
+    return device_handle_handle;
+}
+
+
+
+char *new_tmp_file(const char *prefix) {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    long long milliseconds = (long long)tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+
+    size_t prefix_len = strlen(prefix);
+    size_t filename_len = prefix_len + 2 + 20 + 1; // "__" + 20 digits + null terminator
+    char *filename = (char *)malloc(filename_len);
+    if (filename == NULL) {
+        return NULL;
+    }
+
+    int written = snprintf(filename, filename_len, "%s__%lld", prefix, milliseconds);
+    if (written < 0 || (size_t)written >= filename_len) {
+        free(filename);
+        return NULL;
+    }
+
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL) {
+        free(filename);
+        return NULL;
+    }
+    fclose(fp);
+
+    return filename;
 }

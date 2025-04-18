@@ -42,9 +42,9 @@ enum CrDevicePropertyCode : CrInt32u
 	CrDeviceProperty_ShutterSpeed,
 	CrDeviceProperty_IsoSensitivity,
 	CrDeviceProperty_ExposureProgramMode,
-	CrDeviceProperty_FileType,
+	CrDeviceProperty_FileType,         /// here
 	CrDeviceProperty_JpegQuality,  /* Do not use. Will be removed in the next release. */
-	CrDeviceProperty_StillImageQuality = CrDeviceProperty_JpegQuality,
+	CrDeviceProperty_StillImageQuality = CrDeviceProperty_JpegQuality,   ///use it ///file format
 	CrDeviceProperty_WhiteBalance,
 	CrDeviceProperty_FocusMode,
 	CrDeviceProperty_MeteringMode,
