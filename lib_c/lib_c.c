@@ -144,7 +144,7 @@ unsigned int* get_iso_array(void* device_handle_handle, int* iso_writable, unsig
     return iso_array_tmp;
 }
 
-unsigned int* get_property_array(long property_code, void* device_handle_handle, int* abstract_writable, unsigned int* abstract_current, unsigned int* abstract_array_len, long int* abstract_get_result) {
+void* get_property_array(long property_code, void* device_handle_handle, int* abstract_writable, unsigned int* abstract_current, unsigned int* abstract_array_len, long int* abstract_get_result, size_t TYPE_SIZE) {
     long     nprop = 0;
     void*    abstract_device_property_handle = NULL;
     long int get_prop_result = sdk_get_select_device_properties(device_handle_handle, 1, &property_code, &abstract_device_property_handle, &nprop);
@@ -157,7 +157,7 @@ unsigned int* get_property_array(long property_code, void* device_handle_handle,
 
     unsigned long size = sdk_get_value_size_device_property(abstract_device_property_handle);
     int           number_values = 0;
-    number_values = size / sizeof(unsigned int);
+    number_values = size / TYPE_SIZE;
     *abstract_writable = sdk_is_set_enable_device_property(abstract_device_property_handle);
     *abstract_current = sdk_get_current_value_device_property(abstract_device_property_handle);
     if (number_values <= 0) {
@@ -166,20 +166,23 @@ unsigned int* get_property_array(long property_code, void* device_handle_handle,
         return NULL;
     }
 
-    unsigned int* abstract_array_tmp = malloc(sizeof(unsigned int) * number_values);
+        
+    void* abstract_array_tmp = malloc(TYPE_SIZE * number_values);
     if (!abstract_array_tmp) {
         *abstract_get_result = -2;
         return NULL;
     }
 
+    void* return_val = abstract_array_tmp;
     *abstract_array_len = number_values;
-    unsigned int const* source = (unsigned int const*)sdk_get_values_device_property(abstract_device_property_handle);
-    for (int i = 0; i < number_values; ++i, ++source) {
+    unsigned char* array_iterator = abstract_array_tmp;
+    unsigned char* source = sdk_get_values_device_property(abstract_device_property_handle);
+    for (int i = 0; i < number_values; ++i, source += TYPE_SIZE, array_iterator += TYPE_SIZE) {
         // printf("%d\n", *source);
-        memcpy(&abstract_array_tmp[i], source, sizeof(unsigned int));
+        memcpy(array_iterator, source, TYPE_SIZE);
     }
 
-    return abstract_array_tmp;
+    return return_val;
 }
 
 int get_current_value_property(long property_code, void* device_handle_handle, unsigned int* abstract_current) {

@@ -13,14 +13,19 @@
 #include <time.h>
 #include <unistd.h>
 
+#define APERTURE_CODE 256U
+#define APERTURE_VALUE_TYPE 8194U
+typedef unsigned short APERTURE_TYPE;
+
 int main() {
     void*        device_handle_handle = init_sdk__get_device_handle_handle();
     int          aperture_writable = -1;
     unsigned int aperture_current = 0;
     unsigned int aperture_array_len = 0;
     long int     aperture_get_result = 0;
+    sleep(2);
     // unsigned int *aperture_array = get_aperture_array(device_handle_handle, &aperture_writable, &aperture_current, &aperture_array_len, &aperture_get_result);
-    unsigned int* aperture_array = get_property_array(APERTURE_CODE, device_handle_handle, &aperture_writable, &aperture_current, &aperture_array_len, &aperture_get_result);
+    APERTURE_TYPE* aperture_array = (APERTURE_TYPE*)get_property_array(APERTURE_CODE, device_handle_handle, &aperture_writable, &aperture_current, &aperture_array_len, &aperture_get_result, sizeof(APERTURE_TYPE));
     printf("aperture_writable: %d\naperture_current: %d\naperture_array_len: %d\n", aperture_writable, aperture_current, aperture_array_len);
     if (aperture_get_result) {
         printf("Failed to get aperture array\n");
@@ -41,7 +46,7 @@ int main() {
     for (unsigned int i = 0; i < aperture_array_len; i++) {
         sleep(1);
         printf("%2.d)set aperture: %d\n", i + 1, aperture_array[i]);
-        set_value_property(APERTURE_CODE, device_handle_handle, aperture_array[i], APERTURE_TYPE);
+        set_value_property(APERTURE_CODE, device_handle_handle, aperture_array[i], APERTURE_VALUE_TYPE);
     }
 
     if (sdk_release()) {

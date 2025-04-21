@@ -8,8 +8,10 @@ app = Flask(__name__)
 FILE_PAIRS = {
     'focus_mode': ('./../build/focus_mode.list', './../build/focus_mode.nfo', './../build/focus_mode.set'),
     'shoot_mode': ('./../build/shoot_mode.list', './../build/shoot_mode.nfo', './../build/shoot_mode.set'),
+    'apperture' : ('./../build/aperture.list', './../build/aperture.nfo', './../build/aperture.set'),
+    'shutter': ('./../build/shutter_speed.list', './../build/shutter_speed.nfo', './../build/shutter_speed.set'),
     'iso': ('./../build/iso.list', './../build/iso.nfo', './../build/iso.set'),
-    'shutter': ('./../build/shutter.list', './../build/shutter.nfo', './../build/shutter.set')
+    'exposure_bias_compensation' : (('./../build/exposure_bias_compensation.list', './../build/exposure_bias_compensation.nfo', './../build/exposure_bias_compensation.set')),
 }
 
 def read_file(filename):

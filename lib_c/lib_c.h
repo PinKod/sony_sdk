@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 #ifndef LIB_C_C
 #define LIB_C_C
 
@@ -32,7 +34,7 @@ char* get_live_veiw(void* device_handle_handle);
 
 unsigned int* get_iso_array(void* device_handle_handle, int* iso_writable, unsigned int* iso_current, unsigned int* iso_array_len, long int* iso_get_result);
 
-unsigned int* get_property_array(long property_code, void* device_handle_handle, int* abstract_writable, unsigned int* abstract_current, unsigned int* abstract_array_len, long int* abstract_get_result);
+void* get_property_array(long property_code, void* device_handle_handle, int* abstract_writable, unsigned int* abstract_current, unsigned int* abstract_array_len, long int* abstract_get_result, size_t TYPE_SIZE);
 int           get_current_value_property(long property_code, void* device_handle_handle, unsigned int* abstract_current);
 long          set_value_property(long property_code, void* device_handle_handle, unsigned int value, unsigned int value_type);
 
