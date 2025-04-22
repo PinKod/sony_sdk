@@ -10,6 +10,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #define BUFF_SIZE_IMAGE_INFO 1048576 //  1024 * 1024
 
@@ -227,6 +228,14 @@ void proc_set_setting() {
     // clang-format on
 }
 
+long mtime() {
+  struct timeval t;
+
+  gettimeofday(&t, NULL);
+  long mt = (long)t.tv_sec * 1000 + t.tv_usec / 1000;
+  return mt;
+}
+
 int main(int argc, char** argv) {
     device_handle_handle = init_sdk__get_device_handle_handle();
 
@@ -235,13 +244,48 @@ int main(int argc, char** argv) {
     printf("Init complete\n");
 
     int i = 0;
-    while (i++ < 100000) {
+    int a = 0;
+    long time0;
+    long time1;
+    long time2;
+    long time3;
+    long time4;
+    
+    int iter = 0;
+    long time1_av = 0;
+    long time2_av = 0;
+    long time3_av = 0;
+    long time4_av = 0;
+    
+    FILE* file = fopen("time_check.txt", "w");
+
+    while (i++ < 150000) {
+        a++;
+        time0=mtime();
         proc_liveview();
+        time1=mtime();
         proc_dump_lists();
+        time2=mtime();
         proc_dump_current_settings();
+        time3=mtime();
         proc_set_setting();
-        usleep(500000);
+        time4=mtime();
+
+        if ((a%300)==0) {
+            printf("Working: lifeview %lums, dump_lists %lums, dump_current_settings %lums, set_settings %lums\n"
+                   , time1-time0, time2-time1, time3-time2, time4-time3);
+            iter += 1;
+            time1_av += time1-time0;
+            time2_av += time2-time1;
+            time3_av += time3-time2;
+            time4_av += time4-time3;
+            fprintf(file, "Working: lifeview %lums, dump_lists %lums, dump_current_settings %lums, set_settings %lums,  t1_av: %ldms,   t2_av: %ldms,   t3_av: %ldms,   t4_av: %ldms,\n"
+                   , time1-time0, time2-time1, time3-time2, time4-time3, time1_av / iter, time2_av / iter, time3_av / iter, time4_av / iter);
+        }
+
+        usleep(10000);
     }
+    fclose(file);
 
     sdk_release();
 }
