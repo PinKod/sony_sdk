@@ -36,16 +36,17 @@
 #define NFO_JPEG_QUALITY_FILE  "jpeg_quality.nfo"
 #define LIST_JPEG_QUALITY_FILE "jpeg_quality.list"
 
-
 #define NFO_REMAIN_PHOTOS_FILE  "remain_photos.nfo"
 
+#define SET_LIVE_VEIW_QUALITY_FILE  "live_veiw_quality.set"
+#define NFO_LIVE_VEIW_QUALITY_FILE  "live_veiw_quality.nfo"
+#define LIST_LIVE_VEIW_QUALITY_FILE "live_veiw_quality.list"
+
+#define NFO_ZOOM_SCALE_FILE  "zoom_scale.nfo"
 
 
+//ZOOM_SCALE
 
-
-
-
-//remainphotos
 
 
 
@@ -483,6 +484,41 @@ typedef unsigned int REMAIN_PHOTOS_TYPE;
 //
 //
 // REMAIN PHOTOS    
+
+
+
+
+// LIVE VEIW QUALITY
+//
+//
+// live veiw quality codes
+#define LIVE_VEIW_QUALITY_CODE        1288U
+#define LIVE_VEIW_QUALITY_VALUE_TYPE  8194U
+#define LIVE_VEIW_QUALITY_TABLE_COUNT 2
+typedef unsigned short LIVE_VEIW_QUALITY_TYPE;
+LIVE_VEIW_QUALITY_TYPE LIVE_VEIW_QUALITY_TABLE_API_CODES[LIVE_VEIW_QUALITY_TABLE_COUNT] = {
+    0,
+    1};
+char* LIVE_VEIW_QUALITY_TABLE_API_LIST[LIVE_VEIW_QUALITY_TABLE_COUNT] = {
+    "low_w640",
+    "high_w1024"};
+//
+//
+// LIVE VEIW QUALITY
+
+
+
+
+// ZOOM SCALE
+//
+//
+// zoom scale codes
+#define ZOOM_SCALE_CODE        292U
+#define ZOOM_SCALE_VALUE_TYPE  16387U
+typedef unsigned int ZOOM_SCALE_TYPE;
+//
+//
+// ZOOM SCALE   
 
 
 

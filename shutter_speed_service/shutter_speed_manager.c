@@ -21,7 +21,7 @@ int main() {
     unsigned int shutter_speed_array_len = 0;
     long int     shutter_speed_get_result = 0;
     // unsigned int *shutter_speed_array = get_shutter_speed_array(device_handle_handle, &shutter_speed_writable, &shutter_speed_current, &shutter_speed_array_len, &shutter_speed_get_result);
-    EXPOSURE_BIAS_COMPENSATION_TYPE* shutter_speed_array = get_property_array(JPEG_QUALITY_CODE, device_handle_handle, &shutter_speed_writable, &shutter_speed_current, &shutter_speed_array_len, &shutter_speed_get_result, sizeof(JPEG_QUALITY_TYPE));
+    EXPOSURE_BIAS_COMPENSATION_TYPE* shutter_speed_array = get_property_array(LIVE_VEIW_QUALITY_CODE, device_handle_handle, &shutter_speed_writable, &shutter_speed_current, &shutter_speed_array_len, &shutter_speed_get_result, sizeof(LIVE_VEIW_QUALITY_TYPE));
     printf("shutter_speed_writable: %d\nshutter_speed_current: %d\nshutter_speed_array_len: %d\n", shutter_speed_writable, shutter_speed_current, shutter_speed_array_len);
     if (shutter_speed_get_result) {
         printf("Failed to get shutter_speed array\n");
@@ -33,7 +33,7 @@ int main() {
     }
 
     unsigned int current_shutter_speed = 0;
-    if (get_current_value_property(JPEG_QUALITY_CODE, device_handle_handle, &current_shutter_speed) == 0) {
+    if (get_current_value_property(LIVE_VEIW_QUALITY_CODE, device_handle_handle, &current_shutter_speed) == 0) {
         printf("current shutter_speed value: %d\n", current_shutter_speed);
     } else {
         printf("get current value property error\n");
@@ -42,7 +42,7 @@ int main() {
     for (unsigned int i = 0; i < shutter_speed_array_len; i++) {
         sleep(1);
         printf("%2.d)set shutter_speed: %d\n", i + 1, shutter_speed_array[i]);
-        set_value_property(JPEG_QUALITY_CODE, device_handle_handle, shutter_speed_array[i], JPEG_QUALITY_VALUE_TYPE);
+        set_value_property(LIVE_VEIW_QUALITY_CODE, device_handle_handle, shutter_speed_array[i], LIVE_VEIW_QUALITY_VALUE_TYPE);
     }
 
     if (sdk_release()) {

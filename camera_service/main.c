@@ -85,7 +85,7 @@ void write_current_setting_to_file(unsigned int code, unsigned int value_type, i
     }
     
 
-    if(code == REMAIN_PHOTOS_CODE) {
+    if(!table_codes) {
         fprintf(file, "%d\n", current_value);
         fclose(file);
         rename(TEMPORARY_FILE, file_name);
@@ -193,6 +193,7 @@ void proc_dump_lists() {
     write_lists_to_file(EXPOSURE_BIAS_COMPENSATION_CODE, EXPOSURE_BIAS_COMPENSATION_TABLE_COUNT, LIST_EXPOSURE_BIAS_COMPENSATION_FILE, EXPOSURE_BIAS_COMPENSATION_TYPE_TABLE_API_CODES, EXPOSURE_BIAS_COMPENSATION_TYPE_TABLE_API_LIST, sizeof(EXPOSURE_BIAS_COMPENSATION_TYPE));
     write_lists_to_file(WHITE_BALANCE_CODE,              WHITE_BALANCE_TABLE_COUNT,              LIST_WHITE_BALANCE_FILE,              WHITE_BALANCE_TABLE_API_CODES,                   WHITE_BALANCE_TABLE_API_LIST,                   sizeof(WHITE_BALANCE_TYPE));
     write_lists_to_file(JPEG_QUALITY_CODE,               JPEG_QUALITY_TABLE_COUNT,               LIST_JPEG_QUALITY_FILE,               JPEG_QUALITY_TABLE_API_CODES,                    JPEG_QUALITY_TABLE_API_LIST,                    sizeof(JPEG_QUALITY_TYPE));
+    write_lists_to_file(LIVE_VEIW_QUALITY_CODE,          LIVE_VEIW_QUALITY_TABLE_COUNT,          LIST_LIVE_VEIW_QUALITY_FILE,          LIVE_VEIW_QUALITY_TABLE_API_CODES,               LIVE_VEIW_QUALITY_TABLE_API_LIST,               sizeof(LIVE_VEIW_QUALITY_TYPE));
     // clang-format on
 }
 
@@ -207,6 +208,8 @@ void proc_dump_current_settings() {
     write_current_setting_to_file(WHITE_BALANCE_CODE,              WHITE_BALANCE_VALUE_TYPE,              WHITE_BALANCE_TABLE_COUNT,              NFO_WHITE_BALANCE_FILE,              WHITE_BALANCE_TABLE_API_CODES,                   WHITE_BALANCE_TABLE_API_LIST,                   sizeof(WHITE_BALANCE_TYPE));
     write_current_setting_to_file(JPEG_QUALITY_CODE,               JPEG_QUALITY_VALUE_TYPE,               JPEG_QUALITY_TABLE_COUNT,               NFO_JPEG_QUALITY_FILE,               JPEG_QUALITY_TABLE_API_CODES,                    JPEG_QUALITY_TABLE_API_LIST,                    sizeof(JPEG_QUALITY_TYPE));
     write_current_setting_to_file(REMAIN_PHOTOS_CODE,              REMAIN_PHOTOS_VALUE_TYPE,              0,                                      NFO_REMAIN_PHOTOS_FILE,              NULL,                                            NULL,                                           sizeof(REMAIN_PHOTOS_TYPE));
+    write_current_setting_to_file(LIVE_VEIW_QUALITY_CODE,          LIVE_VEIW_QUALITY_VALUE_TYPE,          LIVE_VEIW_QUALITY_TABLE_COUNT,          NFO_LIVE_VEIW_QUALITY_FILE,          LIVE_VEIW_QUALITY_TABLE_API_CODES,               LIVE_VEIW_QUALITY_TABLE_API_LIST,               sizeof(LIVE_VEIW_QUALITY_TYPE));
+    write_current_setting_to_file(ZOOM_SCALE_CODE,                 ZOOM_SCALE_VALUE_TYPE,                 0,                                      NFO_ZOOM_SCALE_FILE,                 NULL,                                            NULL,                                           sizeof(ZOOM_SCALE_TYPE));
     // clang-format on
 }
 
@@ -220,6 +223,7 @@ void proc_set_setting() {
     new_setting_from_file(EXPOSURE_BIAS_COMPENSATION_CODE, EXPOSURE_BIAS_COMPENSATION_VALUE_TYPE, EXPOSURE_BIAS_COMPENSATION_TABLE_COUNT, SET_EXPOSURE_BIAS_COMPENSATION_FILE, EXPOSURE_BIAS_COMPENSATION_TYPE_TABLE_API_CODES, EXPOSURE_BIAS_COMPENSATION_TYPE_TABLE_API_LIST, sizeof(EXPOSURE_BIAS_COMPENSATION_TYPE));
     new_setting_from_file(WHITE_BALANCE_CODE,              WHITE_BALANCE_VALUE_TYPE,              WHITE_BALANCE_TABLE_COUNT,              SET_WHITE_BALANCE_FILE,              WHITE_BALANCE_TABLE_API_CODES,                   WHITE_BALANCE_TABLE_API_LIST,                   sizeof(WHITE_BALANCE_TYPE));
     new_setting_from_file(JPEG_QUALITY_CODE,               JPEG_QUALITY_VALUE_TYPE,               JPEG_QUALITY_TABLE_COUNT,               SET_JPEG_QUALITY_FILE,               JPEG_QUALITY_TABLE_API_CODES,                    JPEG_QUALITY_TABLE_API_LIST,                    sizeof(JPEG_QUALITY_TYPE));
+    new_setting_from_file(LIVE_VEIW_QUALITY_CODE,          LIVE_VEIW_QUALITY_VALUE_TYPE,          LIVE_VEIW_QUALITY_TABLE_COUNT,          SET_LIVE_VEIW_QUALITY_FILE,          LIVE_VEIW_QUALITY_TABLE_API_CODES,               LIVE_VEIW_QUALITY_TABLE_API_LIST,               sizeof(LIVE_VEIW_QUALITY_TYPE));
     // clang-format on
 }
 

@@ -11,15 +11,23 @@
         button { padding: 5px 15px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; }
         button:hover { background: #45a049; }
         .current { color: #666; margin: 5px 0; }
+        #remain_photos { background-color: #f5f5f5; }
     </style>
 </head>
 <body>
     <h1>Camera Settings Control</h1>
     
     {% for setting_name, data in settings.items() %}
-    <div class="setting-group">
-        <h2>{{ setting_name|title }} Settings</h2>
-        <div class="current">Current: {{ data.current }}</div>
+    <div class="setting-group" {% if setting_name == 'remain_photos' %}id="remain_photos"{% endif %}>
+        <h2>{{ setting_name|title }}</h2>
+        <div class="current">Current: 
+            {% if setting_name == 'remain_photos' %}
+                <span id="remain_photos_value">{{ data.current }}</span>
+            {% else %}
+                {{ data.current }}
+            {% endif %}
+        </div>
+        {% if data.writable %}
         <form method="POST">
             <select name="{{ setting_name }}_select">
                 {% for option in data.options %}
@@ -28,7 +36,40 @@
             </select>
             <button type="submit" name="set_{{ setting_name }}">Set {{ setting_name|title }}</button>
         </form>
+        {% endif %}
     </div>
     {% endfor %}
+
+    <script>
+        // Auto-update remain_photos every second
+        function updateRemainPhotos() {
+            fetch('/get_remain_photos')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('remain_photos_value').textContent = data.value;
+                });
+        }
+
+        // Update every second
+        setInterval(updateRemainPhotos, 1000);
+        // Initial update
+        updateRemainPhotos();
+    </script>
+
+    <script>
+        // Auto-update remain_photos every second
+        function updateZoomScale() {
+            fetch('/get_zoom_scales')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('zoom_scale_value').textContent = data.value;
+                });
+        }
+
+        // Update every second
+        setInterval(updateZoomScale, 1000);
+        // Initial update
+        updateZoomScale();
+    </script>
 </body>
 </html>
