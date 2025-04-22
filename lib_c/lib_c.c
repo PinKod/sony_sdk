@@ -208,7 +208,7 @@ long set_value_property(long property_code, void* device_handle_handle, unsigned
         return -3;
     }
 
-    if (sdk_is_set_enable_device_property(abstract_device_property_handle) == 1) {
+    if (sdk_is_set_enable_device_property(abstract_device_property_handle) == 0) {
         fprintf(stderr, "Set value FAILED 0      not enable\n");
         return -2;
     }

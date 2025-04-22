@@ -12,6 +12,9 @@ FILE_PAIRS = {
     'shutter': ('./../build/shutter_speed.list', './../build/shutter_speed.nfo', './../build/shutter_speed.set'),
     'iso': ('./../build/iso.list', './../build/iso.nfo', './../build/iso.set'),
     'exposure_bias_compensation' : (('./../build/exposure_bias_compensation.list', './../build/exposure_bias_compensation.nfo', './../build/exposure_bias_compensation.set')),
+    'white_balance': ('./../build/white_balance.list', './../build/white_balance.nfo', './../build/white_balance.set'),
+    'jpeg_quality': ('./../build/jpeg_quality.list', './../build/jpeg_quality.nfo', './../build/jpeg_quality.set'),
+    'remain_photos': (/'./../build/remain_photos.nfo'),
 }
 
 def read_file(filename):

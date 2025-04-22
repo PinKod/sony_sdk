@@ -28,9 +28,24 @@
 #define NFO_EXPOSURE_BIAS_COMPENSATION_FILE  "exposure_bias_compensation.nfo"
 #define LIST_EXPOSURE_BIAS_COMPENSATION_FILE "exposure_bias_compensation.list"
 
+#define SET_WHITE_BALANCE_FILE  "white_balance.set"
+#define NFO_WHITE_BALANCE_FILE  "white_balance.nfo"
+#define LIST_WHITE_BALANCE_FILE "white_balance.list"
+
+#define SET_JPEG_QUALITY_FILE  "jpeg_quality.set"
+#define NFO_JPEG_QUALITY_FILE  "jpeg_quality.nfo"
+#define LIST_JPEG_QUALITY_FILE "jpeg_quality.list"
+
+
+#define NFO_REMAIN_PHOTOS_FILE  "remain_photos.nfo"
 
 
 
+
+
+
+
+//remainphotos
 
 
 
@@ -391,34 +406,86 @@ char* EXPOSURE_BIAS_COMPENSATION_TYPE_TABLE_API_LIST[EXPOSURE_BIAS_COMPENSATION_
 //
 //
 // white balance codes
-#define WHITE_BALANCE_CODE        
-#define WHITE_BALANCE_VALUE_TYPE  8195U
-#define WHITE_BALANCE_TABLE_COUNT 35
-typedef  WHITE_BALANCE_TYPE;
+#define WHITE_BALANCE_CODE 264U     
+#define WHITE_BALANCE_VALUE_TYPE  8194U
+#define WHITE_BALANCE_TABLE_COUNT 14
+typedef unsigned short WHITE_BALANCE_TYPE;
 WHITE_BALANCE_TYPE WHITE_BALANCE_TABLE_API_CODES[WHITE_BALANCE_TABLE_COUNT] = {
-    16777215, 268435506, 268435520, 268435536,
-    100, 125, 160, 200,
-    250, 320, 400, 500,
-    640, 800, 1000, 1250,
-    1600, 2000, 2500, 3200,
-    4000, 5000, 6400, 8000,
-    10000, 12800, 16000, 20000,
-    25600, 32000, 268475456, 268486656,
-    268499456, 268515456, 268537856};
+    0,
+    17,
+    18,
+    19,
+    20,
+    33,
+    34,
+    35,
+    36,
+    1,
+    256,
+    257,
+    258,
+    259};
 char* WHITE_BALANCE_TABLE_API_LIST[WHITE_BALANCE_TABLE_COUNT] = {
-    "auto",
-    "50", "64", "80",
-    "100", "125", "160", "200",
-    "250", "320", "400", "500",
-    "640", "800", "1000", "1250",
-    "1600", "2000", "2500", "3200",
-    "4000", "5000", "6400", "8000",
-    "10000", "12800", "16000", "20000",
-    "25600", "32000", "40000", "51200",
-    "64000", "80000", "102400"};
+    "AWB",
+    "Daylight",
+    "Shade",
+    "Cloudy",
+    "Incandescent",
+    "WarmWhite_Fluor",
+    "Cool_White_Fluor",
+    "Day_White_Fluor",
+    "Daylight_Fluor",
+    "Underwater_Auto",
+    "Color.Temp_Filter",
+    "Custom_1",
+    "Custom_2",
+    "Custom_3"};
 //
 //
-// ISO
+// WHITE BALANCE
+
+
+
+
+// JPEG QUALITY
+//
+//
+// jpeg quality codes
+#define JPEG_QUALITY_CODE        263U
+#define JPEG_QUALITY_VALUE_TYPE  8194U
+#define JPEG_QUALITY_TABLE_COUNT 4
+typedef unsigned short JPEG_QUALITY_TYPE;
+JPEG_QUALITY_TYPE JPEG_QUALITY_TABLE_API_CODES[JPEG_QUALITY_TABLE_COUNT] = {
+    4,
+    3,
+    2,
+    1};
+char* JPEG_QUALITY_TABLE_API_LIST[JPEG_QUALITY_TABLE_COUNT] = {
+    "Extra_fine",
+    "Fine",
+    "Standard",
+    "Light",
+};
+//
+//
+// JPEG QUALITY
+
+
+
+
+// REMAIN PHOTOS
+//
+//
+// remain photos codes
+#define REMAIN_PHOTOS_CODE        1801U
+#define REMAIN_PHOTOS_VALUE_TYPE  16387U
+typedef unsigned int REMAIN_PHOTOS_TYPE;
+//
+//
+// REMAIN PHOTOS    
+
+
+
 
 
 #endif // SONY_PROPERTIES_TABLES_H

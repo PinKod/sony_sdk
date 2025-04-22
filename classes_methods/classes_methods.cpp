@@ -116,11 +116,11 @@ void* sdk_construct_device_property() {
 }
 
 int sdk_is_get_enable_device_property(void* device_property_handle) {
-    return reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle)->IsGetEnableCurrentValue() == true ? 0 : 1;
+    return reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle)->IsGetEnableCurrentValue() == true ? 1 : 0;
 }
 
 int sdk_is_set_enable_device_property(void* device_property_handle) {
-    return reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle)->IsSetEnableCurrentValue() == true ? 0 : 1;
+    return reinterpret_cast<SCRSDK::CrDeviceProperty*>(device_property_handle)->IsSetEnableCurrentValue() == true ? 1 : 0;
 }
 
 void sdk_set_code_device_property(void* device_property_handle, long int code) {
