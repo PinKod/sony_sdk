@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Camera Control</title>
@@ -238,4 +238,321 @@
         document.addEventListener('DOMContentLoaded', initialize);
     </script>
 </body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Control</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        #settings {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .setting {
+            margin: 15px 0;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        label {
+            display: inline-block;
+            width: 220px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        select {
+            width: 280px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        #live-view-container {
+            position: relative;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #capture-image {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        #loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .option-missing {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Camera Control</h1>
+
+    <div id="live-view-container">
+        <div id="loading-overlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading Frame...</div>
+        </div>
+        <img id="capture-image" src="/capture" />
+    </div>
+
+    <div id="settings">
+        <div class="setting">
+            <label for="exposure_bias_compensation">Exposure Bias:</label>
+            <select id="exposure_bias_compensation"></select>
+        </div>
+        <div class="setting">
+            <label for="focus_mode">Focus Mode:</label>
+            <select id="focus_mode"></select>
+        </div>
+        <div class="setting">
+            <label for="shoot_mode">Shoot Mode:</label>
+            <select id="shoot_mode"></select>
+        </div>
+        <div class="setting">
+            <label for="white_balance">White Balance:</label>
+            <select id="white_balance"></select>
+        </div>
+        <div class="setting">
+            <label for="iso">ISO:</label>
+            <select id="iso"></select>
+        </div>
+        <div class="setting">
+            <label for="aperture">Aperture:</label>
+            <select id="aperture"></select>
+        </div>
+        <div class="setting">
+            <label for="shutter_speed">Shutter Speed:</label>
+            <select id="shutter_speed"></select>
+        </div>
+        <div class="setting">
+            <label for="jpeg_quality">JPEG Quality:</label>
+            <select id="jpeg_quality"></select>
+        </div>
+        <div class="setting">
+            <label for="live_veiw_quality">Live View Quality:</label>
+            <select id="live_veiw_quality"></select>
+        </div>
+    </div>
+
+    <script>
+        const settings = [
+            'focus_mode', 'shoot_mode', 'iso', 'aperture', 'shutter_speed',
+            'exposure_bias_compensation', 'white_balance', 'jpeg_quality',
+            'live_veiw_quality'
+        ];
+
+        let currentValues = {};
+        let isImageLoading = false;
+        let loadImageTimeout = null;
+
+        // Функция загрузки изображения с очередью
+        function loadImage() {
+            if (isImageLoading) return;
+            
+            const img = document.getElementById('capture-image');
+            const loader = document.getElementById('loading-overlay');
+            
+            isImageLoading = true;
+            loader.style.display = 'flex';
+            
+            const newImg = new Image();
+            newImg.onload = () => {
+                img.src = newImg.src;
+                isImageLoading = false;
+                loader.style.display = 'none';
+                scheduleNextLoad();
+            };
+            newImg.onerror = () => {
+                isImageLoading = false;
+                loader.style.display = 'none';
+                scheduleNextLoad(1000); // Retry after error
+            };
+            newImg.src = `/capture?t=${Date.now()}`;
+        }
+
+        function scheduleNextLoad(delay = 100) {
+            if (loadImageTimeout) clearTimeout(loadImageTimeout);
+            loadImageTimeout = setTimeout(loadImage, delay);
+        }
+
+        function updateCurrentValues() {
+            fetch('/get_current_settings')
+                .then(response => response.text())
+                .then(xml => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(xml, 'text/xml');
+                    
+                    doc.querySelectorAll('setting').forEach(setting => {
+                        const name = setting.getAttribute('name');
+                        currentValues[name] = setting.textContent;
+                    });
+
+                    settings.forEach(settingName => {
+                        const select = document.getElementById(settingName);
+                        if (select && currentValues[settingName]) {
+                            if (!select.matches(':focus')) {
+                                select.value = currentValues[settingName];
+                                if (!Array.from(select.options).some(opt => opt.value === currentValues[settingName])) {
+                                    const opt = document.createElement('option');
+                                    opt.value = currentValues[settingName];
+                                    opt.textContent = `${currentValues[settingName]} (current)`;
+                                    opt.className = 'option-missing';
+                                    select.appendChild(opt);
+                                }
+                            }
+                        }
+                    });
+                });
+        }
+
+        function loadOptions(settingName) {
+            const select = document.getElementById(settingName);
+            select.innerHTML = `
+                <option class="loading" disabled>
+                    Loading...
+                    <svg class="spinner" viewBox="0 0 50 50" style="width:20px;height:20px;vertical-align:middle;margin-left:10px;">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                    </svg>
+                </option>
+            `;
+
+            fetch(`/get_options/${settingName}`)
+                .then(response => response.text())
+                .then(xml => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(xml, 'text/xml');
+                    select.innerHTML = '';
+
+                    doc.querySelectorAll('option').forEach(option => {
+                        const opt = document.createElement('option');
+                        opt.value = option.textContent;
+                        opt.textContent = option.textContent;
+                        select.appendChild(opt);
+                    });
+
+                    if (currentValues[settingName] && !select.querySelector(`option[value="${currentValues[settingName]}"]`)) {
+                        const opt = document.createElement('option');
+                        opt.value = currentValues[settingName];
+                        opt.textContent = `${currentValues[settingName]} (current)`;
+                        opt.className = 'option-missing';
+                        select.appendChild(opt);
+                    }
+
+                    if (currentValues[settingName]) {
+                        select.value = currentValues[settingName];
+                    }
+                })
+                .catch(() => {
+                    select.innerHTML = '<option class="loading">Failed to load options</option>';
+                });
+        }
+
+        function updateSetting(setting, value) {
+            const formData = new FormData();
+            formData.append('setting', setting);
+            formData.append('value', value);
+            
+            fetch('/set_setting', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(response => {
+                if (!response.ok) alert('Error updating setting');
+            });
+        }
+
+        function initialize() {
+            settings.forEach(settingName => {
+                const select = document.getElementById(settingName);
+                select.addEventListener('change', (e) => {
+                    updateSetting(settingName, e.target.value);
+                });
+                loadOptions(settingName);
+            });
+
+            // Обновление настроек каждые 2 секунды
+            setInterval(() => {
+                settings.forEach(name => loadOptions(name));
+                updateCurrentValues();
+            }, 5000);
+
+            // Запуск загрузки изображений
+            // loadImage();
+
+            setInterval(() => {
+                const img = document.getElementById('capture-image');
+                img.src = `/capture?t=${Date.now()}`;
+            }, 33);
+
+            // Пауза при скрытии вкладки
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    if (loadImageTimeout) clearTimeout(loadImageTimeout);
+                } else {
+                    // loadImage();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
 </html>
+
+
+
+
+
