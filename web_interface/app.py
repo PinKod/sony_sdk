@@ -157,7 +157,7 @@ SETTINGS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../build
 ALLOWED_SETTINGS = [
     'focus_mode', 'shoot_mode', 'iso', 'aperture', 'shutter_speed',
     'exposure_bias_compensation', 'white_balance', 'jpeg_quality',
-    'live_veiw_quality'
+    'live_veiw_quality', 'focus_mode_settings'  # Add new setting
 ]
 
 @app.route('/')

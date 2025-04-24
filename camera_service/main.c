@@ -11,6 +11,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <limits.h>
 
 #define BUFF_SIZE_IMAGE_INFO 1048576 //  1024 * 1024
 
@@ -138,6 +139,19 @@ void new_setting_from_file(unsigned int code, unsigned int value_type, int table
         return;
     }
     
+
+    if(code == FOCUS_POSITION_SETTING_CODE) {
+        int new_val_addition = atoi(new_setting);
+        unsigned int current_focus_val = 0; 
+        if (get_current_value_property(FOCUS_POSITION_SETTING_CODE, device_handle_handle, &current_focus_val) == 0) {
+            unsigned int new_val = current_focus_val + new_val_addition;
+            if(new_val <= USHRT_MAX) {
+                set_value_property(FOCUS_POSITION_SETTING_CODE, device_handle_handle, new_val, FOCUS_MODE_VALUE_TYPE);
+            }
+        }
+        return;
+    }
+
     
     int           writable = -1;
     unsigned int  current = 0;
@@ -195,6 +209,7 @@ void proc_dump_lists() {
     write_lists_to_file(WHITE_BALANCE_CODE,              WHITE_BALANCE_TABLE_COUNT,              LIST_WHITE_BALANCE_FILE,              WHITE_BALANCE_TABLE_API_CODES,                   WHITE_BALANCE_TABLE_API_LIST,                   sizeof(WHITE_BALANCE_TYPE));
     write_lists_to_file(JPEG_QUALITY_CODE,               JPEG_QUALITY_TABLE_COUNT,               LIST_JPEG_QUALITY_FILE,               JPEG_QUALITY_TABLE_API_CODES,                    JPEG_QUALITY_TABLE_API_LIST,                    sizeof(JPEG_QUALITY_TYPE));
     write_lists_to_file(LIVE_VEIW_QUALITY_CODE,          LIVE_VEIW_QUALITY_TABLE_COUNT,          LIST_LIVE_VEIW_QUALITY_FILE,          LIVE_VEIW_QUALITY_TABLE_API_CODES,               LIVE_VEIW_QUALITY_TABLE_API_LIST,               sizeof(LIVE_VEIW_QUALITY_TYPE));
+    write_lists_to_file(FOCUS_POSITION_SETTING_CODE,     FOCUS_POSITION_SETTING_TABLE_COUNT,     LIST_FOCUS_POSITION_SETTING_FILE,     FOCUS_MODE_TABLE_API_CODES,                      FOCUS_MODE_TABLE_API_LIST,                      sizeof(FOCUS_POSITION_SETTING_VALUE_TYPE));
     // clang-format on
 }
 
@@ -211,6 +226,7 @@ void proc_dump_current_settings() {
     write_current_setting_to_file(REMAIN_PHOTOS_CODE,              REMAIN_PHOTOS_VALUE_TYPE,              0,                                      NFO_REMAIN_PHOTOS_FILE,              NULL,                                            NULL,                                           sizeof(REMAIN_PHOTOS_TYPE));
     write_current_setting_to_file(LIVE_VEIW_QUALITY_CODE,          LIVE_VEIW_QUALITY_VALUE_TYPE,          LIVE_VEIW_QUALITY_TABLE_COUNT,          NFO_LIVE_VEIW_QUALITY_FILE,          LIVE_VEIW_QUALITY_TABLE_API_CODES,               LIVE_VEIW_QUALITY_TABLE_API_LIST,               sizeof(LIVE_VEIW_QUALITY_TYPE));
     write_current_setting_to_file(ZOOM_SCALE_CODE,                 ZOOM_SCALE_VALUE_TYPE,                 0,                                      NFO_ZOOM_SCALE_FILE,                 NULL,                                            NULL,                                           sizeof(ZOOM_SCALE_TYPE));
+    write_current_setting_to_file(FOCUS_POSITION_SETTING_CODE,     FOCUS_POSITION_SETTING_VALUE_TYPE,     0,                                      NFO_FOCUS_POSITION_SETTING_FILE,     NULL,                                            NULL,                                           sizeof(FOCUS_POSITION_SETTING_TYPE));
     // clang-format on
 }
 

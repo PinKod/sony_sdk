@@ -13,6 +13,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <limits.h>
 
 int main() {
     void*        device_handle_handle = init_sdk__get_device_handle_handle();
@@ -43,6 +44,20 @@ int main() {
         sleep(1);
         printf("%2.d)set shutter_speed: %d\n", i + 1, shutter_speed_array[i]);
         set_value_property(FOCUS_POSITION_SETTING_CODE, device_handle_handle, shutter_speed_array[i], FOCUS_MODE_VALUE_TYPE);
+    }
+
+    FOCUS_MODE_TYPE val = 0;
+    unsigned int i = 0;
+    while(val < USHRT_MAX - 2184) {
+        printf("%2.d)focus: %d\n", i + 1, val);
+        set_value_property(FOCUS_POSITION_SETTING_CODE, device_handle_handle, val, FOCUS_MODE_VALUE_TYPE);
+        sleep(1);
+        unsigned int cur_val = 0;
+        if (get_current_value_property(FOCUS_POSITION_SETTING_CODE, device_handle_handle, &cur_val) == 0) {
+            printf("   current focus val: %d\n", cur_val);
+        }
+        i += 1;
+        val += 2184;
     }
 
     if (sdk_release()) {

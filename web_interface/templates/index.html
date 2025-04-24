@@ -351,6 +351,10 @@
 
     <div id="settings">
         <div class="setting">
+            <label for="focus_mode_settings">Focus Mode Settings (0-65535):</label>
+            <input type="number" id="focus_mode_settings" min="0" max="65535" style="width: 280px; padding: 8px;">
+        </div>
+        <div class="setting">
             <label for="exposure_bias_compensation">Exposure Bias:</label>
             <select id="exposure_bias_compensation"></select>
         </div>
@@ -444,14 +448,21 @@
                     settings.forEach(settingName => {
                         const select = document.getElementById(settingName);
                         if (select && currentValues[settingName]) {
-                            if (!select.matches(':focus')) {
-                                select.value = currentValues[settingName];
-                                if (!Array.from(select.options).some(opt => opt.value === currentValues[settingName])) {
-                                    const opt = document.createElement('option');
-                                    opt.value = currentValues[settingName];
-                                    opt.textContent = `${currentValues[settingName]} (current)`;
-                                    opt.className = 'option-missing';
-                                    select.appendChild(opt);
+                            if (name === 'focus_mode_settings') {
+                                const input = document.getElementById(name);
+                                if (input && !input.matches(':focus')) {
+                                    input.value = currentValues[name] || '';
+                                }
+                            } else {
+                                if (!select.matches(':focus')) {
+                                    select.value = currentValues[settingName];
+                                    if (!Array.from(select.options).some(opt => opt.value === currentValues[settingName])) {
+                                        const opt = document.createElement('option');
+                                        opt.value = currentValues[settingName];
+                                        opt.textContent = `${currentValues[settingName]} (current)`;
+                                        opt.className = 'option-missing';
+                                        select.appendChild(opt);
+                                    }
                                 }
                             }
                         }
@@ -516,11 +527,26 @@
 
         function initialize() {
             settings.forEach(settingName => {
-                const select = document.getElementById(settingName);
-                select.addEventListener('change', (e) => {
-                    updateSetting(settingName, e.target.value);
+            if (settingName === 'focus_mode_settings') {
+                // Handle numeric input specifically
+                const input = document.getElementById(settingName);
+                input.addEventListener('change', (e) => {
+                    const value = parseInt(e.target.value);
+                    if (value >= 0 && value <= 65535) {
+                        updateSetting(settingName, value);
+                    } else {
+                        alert('Value must be between 0 and 65535');
+                        input.value = currentValues[settingName] || '';
+                    }
                 });
-                loadOptions(settingName);
+                } else {
+                    // Existing select handling
+                    const select = document.getElementById(settingName);
+                    select.addEventListener('change', (e) => {
+                        updateSetting(settingName, e.target.value);
+                    });
+                    loadOptions(settingName);
+                }
             });
 
             // Обновление настроек каждые 2 секунды
